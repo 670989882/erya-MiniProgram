@@ -1,0 +1,26 @@
+<!--pages/history/history.wxml-->
+<view class='container'>
+  <view class='tips'>
+    <text>只能存储最近100条历史记录哦！</text>
+    <text bindtap='delall'>全部删除</text>
+  </view>
+  <scroll-view scroll-y class="view">
+    <view wx-if='{{show}}' class='unhistory'>没有历史记录。</view>
+    <view class='list' wx:for='{{list}}' wx:key='this' wx:for-item='parentItem' wx:for-index='parentIndex'>
+      <view class='list_name_box' catchtap='listTap' data-parentindex='{{parentIndex}}' style='height:{{parentItem.height}}rpx;'>
+        <text class='list_item_name'>{{parentItem.input}}</text>
+        <image src='../../icons/down.png' class='icon_down {{parentItem.show&&"icon_down_rotate"}}'></image>
+        <image src='../../icons/del.png' class='icon_down' catchtap='del' data-parentindex='{{parentIndex}}'></image>
+      </view>
+      <view class='list_item' hidden='{{!parentItem.show}}' wx:for='{{parentItem.answers}}' wx:key='this' catchtap='listItemTap' data-index='{{index}}' data-parentindex='{{parentIndex}}'>
+        <view class='list_item_name_box' style='height:{{item.qheight}}rpx;'>
+          <text class='list_item_name'>{{item.question}}</text>
+          <image src='../../icons/down.png' class='icon_down {{item.show&&"icon_down_rotate"}}'></image>
+        </view>
+        <view class='other' hidden='{{!item.show}}' style='height:{{item.aheight}}rpx;'>
+          <text class='other_text'>{{item.answer}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

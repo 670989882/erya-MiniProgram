@@ -1,0 +1,17 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="problem">
+    <text class='tips'>图片识题↓</text>
+  </view>
+  <image class="picture" bindtap="getPicture" src="../../icons/picture.png"></image>
+  <form class="form" bindsubmit="bindFormSubmit">
+    <checkbox value="question" color="#f7982a" checked="{{checked}}" bindtap='checkboxChange' />
+    <text class='cbvalue'>智能提取图片中的题目</text>
+    <textarea class="textarea" fixed="{{true}}" value="{{questions}}" placeholder="请输入题目(多个题目请换行)" name="textarea" maxlength="-1" />
+    <button class="btn" style="color:white;background-color: #f7982a;" form-type="submit"> 查询 </button>
+  </form>
+  <text class='notice'>{{notice}}
+  </text>
+<official-account></official-account>
+<ad class='ad'unit-id="adunit-3330782628e23e17"></ad>
+</view>

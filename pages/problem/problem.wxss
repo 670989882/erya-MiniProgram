@@ -1,0 +1,17 @@
+/* pages/problem/problem.wxss */
+
+.form {
+  margin-top: 50rpx;
+  width: 95%;
+}
+
+.ta {
+  width: 100%;
+  background-color: #eee;
+  border-radius: 17rpx;
+}
+
+.btn {
+  margin-top: 20rpx;
+  border-radius: 17rpx;
+}

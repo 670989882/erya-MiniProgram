@@ -1,0 +1,22 @@
+/* pages/about/about.wxss */
+
+.money {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 300rpx;
+  width: 100%;
+  height: 100%;
+  font-size: 40rpx;
+  color: rgb(141, 127, 127);
+}
+
+.tips {
+  margin-top: 10rpx;
+  font-size: 30rpx;
+}
+.img{
+  border-radius: 50%;
+  width:200rpx;
+  height: 200rpx;
+}

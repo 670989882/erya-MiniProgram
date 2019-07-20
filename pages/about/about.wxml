@@ -1,0 +1,8 @@
+<!--pages/about/about.wxml-->
+<view class='container'>
+  <view class="money">
+  <image class='img' src='../../icons/erya.jpg'></image>
+    <text class='tips' bindlongpress='copy'>{{about.kouling}}</text>
+    <text>{{about.qitao}}</text>
+  </view>
+</view>

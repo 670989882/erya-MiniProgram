@@ -1,0 +1,50 @@
+/* pages/answer/answer.wxss */
+
+.view {
+  padding: 8rpx;
+  border-radius: 20rpx;
+  background: #eee;
+  margin-top: 10rpx;
+  height: 95%;
+  width: 95%;
+}
+
+.list_name_box {
+  background: #fff;
+  border-bottom: 1px solid #efefef;
+  display: flex;
+  align-items: center;
+  padding: 0 15rpx;
+  font-size: 32rpx;
+}
+
+.list_item_name {
+  flex: 1;
+}
+
+.icon_down {
+  width: 35rpx;
+  height: 35rpx;
+  transition: transform 0.3s;
+}
+
+.list_item_name_box {
+  background: #fff;
+  border-bottom: 1px solid #efefef;
+  font-size: 30rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 25rpx 0 50rpx;
+}
+
+.other {
+  display: flex;
+  padding: 0 25rpx 0 50rpx;
+  align-items: center;
+  font-size: 30rpx;
+  color: #666;
+}
+
+.icon_down_rotate {
+  transform: rotate(-90deg);
+}

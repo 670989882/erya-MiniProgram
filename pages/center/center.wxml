@@ -1,0 +1,26 @@
+<view class="container">
+  <view class="headerView">
+    <open-data class="picture" type="userAvatarUrl"></open-data>
+    <open-data type="userNickName"></open-data>
+  </view>
+  <view class="my-list">
+    <navigator class="my-item" url="../history/history">
+      <image src="../../icons/history.png" mode="aspectFit"></image>
+      <text>查询历史</text>
+    </navigator>
+    <navigator class="my-item" url="../problem/problem">
+      <image src="../../icons/problem.png" mode="aspectFit"></image>
+      <text>问题反馈</text>
+    </navigator>
+    <view class="my-item" bindtap='connection'>
+      <image src="../../icons/jieru.png" mode="aspectFit"></image>
+      <text>关联小程序</text>
+    </view>
+    <navigator class="my-item" url="../about/about">
+      <image src="../../icons/gengduo.png" mode="aspectFit"></image>
+      <text>关于我们</text>
+    </navigator>
+    <button open-type="contact">联系客服</button>
+  </view>
+  <ad unit-id="adunit-3330782628e23e17"></ad>
+</view>
