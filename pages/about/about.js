@@ -1,12 +1,12 @@
 // pages/about/about.js
-let app=getApp();
+let app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    about:{}
+    about: {}
   },
   copy: function () {
     wx.setClipboardData({
@@ -67,7 +67,7 @@ Page({
     var that = this;
     wx.request({
       url: app.data.requestUrl + "getNotice/ad",
-      method:'POST',
+      method: 'POST',
       success: function (e) {
         if (e.statusCode == 200) {
           that.setData({

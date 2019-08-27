@@ -1,11 +1,12 @@
-let app=getApp();
+let app = getApp();
 Page({
   data: {
     questions: "",
     notice: "",
     checked: true,
     tempFile: null,
-    access_token: null
+    access_token: null,
+    interstitialAd: null
   },
   setQuestion: function (text) { //将问题送回textarea
     if (this.data.checked) {
@@ -128,98 +129,118 @@ Page({
     }
   },
   bindFormSubmit: function (res) { //查询答案
-    var that = this;
-    var res = res.detail.value.textarea;
-    if (res != "") {
-      app.data.question = res;
-      wx.showLoading({
-        title: '正在查询',
-      })
-      var res = res.split("\n");
-      for (var i = 0; i < res.length; i++) {
-        if (res[i] == "") {
-          res.splice(i, 1);
-          i--;
-          continue;
+    if (app.data.num > 0) {
+      var that = this;
+      var res = res.detail.value.textarea;
+      if (res != "") {
+        app.data.question = res;
+        wx.showLoading({
+          title: '正在查询',
+        })
+        var res = res.split("\n");
+        for (var i = 0; i < res.length; i++) {
+          if (res[i] == "") {
+            res.splice(i, 1);
+            i--;
+            continue;
+          }
+          res[i] = res[i].trim();
+          var tmp = res[i].split("\u00A0");
+          res[i] = "";
+          for (var j = 0; j < tmp.length; j++)
+            res[i] += tmp[j];
         }
-        res[i] = res[i].trim();
-        var tmp = res[i].split("\u00A0");
-        res[i] = "";
-        for (var j = 0; j < tmp.length; j++)
-          res[i] += tmp[j];
-      }
-      wx.request({
-        url: app.data.requestUrl+"getAnswers",
-        method: 'POST',
-        data: {
-          question: res
-        },
-        success: function (e) {
-          if (e.statusCode == 200) {
-            if (Array.isArray(e.data) == true) {
-              wx.hideLoading()
-              var answerslist = [];
-              for (var i = 0; i < res.length; i++) {
-                var anss = new Object();
-                anss.input = res[i];
-                anss.answers = e.data[i].answers
-                answerslist[i] = anss
-              }
-              wx.getStorage({
-                key: 'history',
-                success: function (res) {
-                  var quesdata = res.data;
-                  for (var i = 0; i < answerslist.length; i++)
-                    quesdata.unshift(answerslist[i])
-                  if (quesdata.length < 101)
-                    wx.setStorage({
-                      key: 'history',
-                      data: quesdata,
-                    }); else
-                    wx.setStorage({
-                      key: 'history',
-                      data: quesdata.slice(0, 100),
-                    });
-                },
-                fail: function (res) {
-                  wx.setStorage({
+        let req = true;
+        for (let i = 0; i < res.length; i++) {
+          if (res[i].length < 4) {
+            wx.showToast({
+              title: '题目需大于3个字',
+              icon: 'none'
+            });
+            req = false;
+          }
+        };
+        if (req) {
+          wx.request({
+            url: app.data.requestUrl + "getAnswers",
+            method: 'POST',
+            data: {
+              question: res
+            },
+            success: function (e) {
+              if (e.statusCode == 200) {
+                if (Array.isArray(e.data) == true) {
+                  wx.hideLoading()
+                  var answerslist = [];
+                  for (var i = 0; i < res.length; i++) {
+                    var anss = new Object();
+                    anss.input = res[i];
+                    anss.answers = e.data[i].answers
+                    answerslist[i] = anss
+                  }
+                  wx.getStorage({
                     key: 'history',
-                    data: answerslist.reverse(),
+                    success: function (res) {
+                      var quesdata = res.data;
+                      for (var i = 0; i < answerslist.length; i++)
+                        quesdata.unshift(answerslist[i])
+                      if (quesdata.length < 101)
+                        wx.setStorage({
+                          key: 'history',
+                          data: quesdata,
+                        }); else
+                        wx.setStorage({
+                          key: 'history',
+                          data: quesdata.slice(0, 100),
+                        });
+                    },
+                    fail: function (res) {
+                      wx.setStorage({
+                        key: 'history',
+                        data: answerslist.reverse(),
+                      })
+                    }
                   })
+                  getApp().data.answerslist = answerslist;
+                  wx.navigateTo({
+                    url: '../answer/answer',
+                  })
+                  that.setData({
+                    questions: ""
+                  })
+                  app.data.num--;
+                  that.changeNum();
+                } else {
+                  wx.hideLoading();
+                  wx.showToast({
+                    title: '查询失败',
+                    image: '../../icons/error.png'
+                  })
+                  that.bugreport(e);
                 }
-              })
-              getApp().data.answerslist = answerslist;
-              wx.navigateTo({
-                url: '../answer/answer',
-              })
-              that.setData({
-                questions: ""
-              })
-            } else {
-              wx.hideLoading();
+              } else {
+                wx.hideLoading();
+                wx.showToast({
+                  title: '查询失败,' + e.statusCode,
+                  image: '../../icons/error.png'
+                });
+                that.bugreport(e);
+              }
+            },
+            fail: function (e) {
               wx.showToast({
-                title: '查询失败',
+                title: '服务器异常',
                 image: '../../icons/error.png'
               })
-              that.bugreport(e);
             }
-          } else {
-            wx.hideLoading();
-            wx.showToast({
-              title: '查询失败,' + e.statusCode,
-              image: '../../icons/error.png'
-            });
-            that.bugreport(e);
-          }
-        },
-        fail: function (e) {
-          wx.showToast({
-            title: '服务器异常',
-            image: '../../icons/error.png'
           })
         }
+      }
+    } else
+      wx.showToast({
+        title: '积分不足',
+        icon: "none"
       })
-    }
   },
   onShareAppMessage: function () {
     return {
@@ -233,7 +254,7 @@ Page({
     })
     var that = this;
     wx.request({
-      url: app.data.requestUrl +"getNotice/notice",
+      url: app.data.requestUrl + "getNotice/notice",
       method: "POST",
       success: function (e) {
         if (e.statusCode == 200) {
@@ -255,6 +276,10 @@ Page({
           image: '../../icons/error.png'
         })
       }
+    });
+    // 在页面onLoad回调事件中创建插屏广告实例
+    this.interstitialAd = wx.createInterstitialAd({
+      adUnitId: 'adunit-2bb2a69f9a978b6b'
     })
   },
   problem: function () {
@@ -265,7 +290,7 @@ Page({
   bugreport: function (e) {
     var that = this;
     wx.request({
-      url: app.data.requestUrl +"serverReporter",
+      url: app.data.requestUrl + "serverReporter",
       method: "POST",
       data: {
         "question": that.data.question,
@@ -273,5 +298,23 @@ Page({
         "time": require('../../utils/util.js').formatTime(new Date())
       }
     })
-  }
+  }, onShow: function (e) {
+    if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
+      if (this.interstitialAd) {
+        this.interstitialAd.show();
+        app.data.interstitialAd = false;
+      }
+    }
+  }, changeNum: function () {
+    if (app.data.openid != "") {
+      wx.request({
+        method: "POST",
+        url: app.data.requestUrl + "user/change",
+        data: {
+          openid: app.data.openid,
+          num: app.data.num
+        }
+      })
+    }
+  },
 })

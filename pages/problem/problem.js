@@ -14,8 +14,8 @@ Page({
         title: '正在反馈',
       })
       wx.request({
-        url: app.data.requestUrl+"problem",
-        method:"POST",
+        url: app.data.requestUrl + "problem",
+        method: "POST",
         data: {
           time: require('../../utils/util.js').formatTime(new Date()),
           problem: res.detail.value.textarea

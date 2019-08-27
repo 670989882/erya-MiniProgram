@@ -15,8 +15,9 @@
   margin-top: 10rpx;
   font-size: 30rpx;
 }
-.img{
+
+.img {
   border-radius: 50%;
-  width:200rpx;
+  width: 200rpx;
   height: 200rpx;
 }

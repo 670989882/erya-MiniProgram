@@ -10,11 +10,11 @@
 		"minified": true,
 		"newFeature": true,
 		"autoAudits": false,
-		"checkInvalidKey": true,
-		"uglifyFileName": true
+		"uglifyFileName": true,
+		"checkInvalidKey": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.7.3",
+	"libVersion": "2.6.0",
 	"appid": "wx155ae9b028f9ea16",
 	"projectname": "%E7%BD%91%E8%AF%BE%E7%AD%94%E6%A1%88%E6%9F%A5%E8%AF%A2",
 	"simulatorType": "wechat",

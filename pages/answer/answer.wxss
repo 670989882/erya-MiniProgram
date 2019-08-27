@@ -2,9 +2,9 @@
 
 .view {
   padding: 8rpx;
-  border-radius: 20rpx;
+  border-radius: 10rpx;
   background: #eee;
-  margin-top: 10rpx;
+  margin-top: 14rpx;
   height: 95%;
   width: 95%;
 }
@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   padding: 0 15rpx;
-  font-size: 32rpx;
+  font-size: 36rpx;
 }
 
 .list_item_name {

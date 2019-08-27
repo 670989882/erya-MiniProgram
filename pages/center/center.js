@@ -1,11 +1,13 @@
 // pages/center/center.js
+let app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    num: 0,
+    rewardedVideoAd: ""
   },
   connection: function () {
     wx.showModal({
@@ -28,9 +30,71 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    let that = this;
+    this.data.rewardedVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-6b662195440f652e'
+    });
+    this.data.rewardedVideoAd.onError((e) => {
+      if (e.errCode == 1004) {
+        app.data.num++;
+        that.setData({
+          num: app.data.num
+        });
+        that.changeNum();
+      }
+    });
+    this.data.rewardedVideoAd.onClose((res) => {
+      if (res.isEnded) {
+        app.data.num += 5;
+        that.setData({
+          num: app.data.num
+        });
+        that.changeNum();
+      }
+    });
   },
-
+  changeNum: function () {
+    if (app.data.openid != "") {
+      wx.request({
+        method: "POST",
+        url: app.data.requestUrl + "user/change",
+        data: {
+          openid: app.data.openid,
+          num: app.data.num
+        }
+      })
+    }
+  },
+  openAd:function(e){
+    this.data.rewardedVideoAd.onLoad();
+    this.data.rewardedVideoAd.show().catch(() => {
+      // 失败重试
+      this.data.rewardedVideoAd.load()
+        .then(() => this.data.rewardedVideoAd.show())
+    })
+  },refresh:function(e){
+    let that = this;
+    wx.login({
+      success(res) {
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            method: 'post',
+            url: app.data.requestUrl + "user/login/" + res.code,
+            data: {
+              code: res.code
+            }, success: function (res) {
+              app.data.openid = res.data.openid;
+              app.data.num = res.data.num;
+              that.setData({
+                num:res.data.num
+              })
+            }
+          })
+        }
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -42,7 +106,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      num: app.data.num
+    })
   },
 
   /**
