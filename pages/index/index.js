@@ -3,16 +3,17 @@ Page({
   data: {
     questions: "",
     notice: "",
+    access_token: "",
     checked: true,
     tempFile: null,
-    access_token: null,
-    interstitialAd: null
+    interstitialAd: null,
+    rewardedVideoAd: null
   },
   setQuestion: function (text) { //将问题送回textarea
     if (this.data.checked) {
-      var tmp = text.split("\n");
+      let tmp = text.split("\n");
       text = "";
-      for (var i = 0; i < tmp.length; i++) {
+      for (let i = 0; i < tmp.length; i++) {
         if (tmp[i].indexOf("A") != -1 || tmp[i].indexOf("B") != -1 || tmp[i].indexOf("C") != -1 || tmp[i].indexOf("D") != -1) { //剔除选项
           tmp.splice(i, 1);
           i--;
@@ -23,7 +24,7 @@ Page({
           i--;
           continue;
         }
-        var regsplit = tmp[i].split(/[^\u4e00-\u9fa5]+/);
+        let regsplit = tmp[i].split(/[^\u4e00-\u9fa5]+/);
         if (regsplit.length == 2 && regsplit[0] == "" && regsplit[0] == regsplit[1]) { //剔除整行非中文字符
           tmp.splice(i, 1);
           i--;
@@ -31,7 +32,7 @@ Page({
         }
         regsplit = tmp[i].split(/[<\[\(（【].{2,4}[>\)\]】）]/);
         tmp[i] = ""
-        for (var j = 0; j < regsplit.length; j++) { //剔除题型，分值
+        for (let j = 0; j < regsplit.length; j++) { //剔除题型，分值
           tmp[i] += regsplit[j];
         }
         if (tmp[i].indexOf(".") == 1 || tmp[i].indexOf(".") == 2) { //剔除题号
@@ -57,7 +58,7 @@ Page({
     })
   },
   getPicture: function (e) { //选择图片并且将图片Base64
-    var that = this;
+    let that = this;
     wx.chooseImage({
       count: 1, // 默认9
       sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
@@ -73,7 +74,7 @@ Page({
     })
   },
   getAccess_token: function () { //获取百度的access_token
-    var that = this;
+    let that = this;
     wx.request({
       url: 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=wd0Gi3MVNS3njje62pPSWaWm&client_secret=e8iSc7wsXf5zxpPiK22a8Xe9SyGQHqfq',
       success: function (e) {
@@ -87,7 +88,7 @@ Page({
     })
   },
   getAnswerFrombd: function () { //调用百度api获得文字
-    var that = this;
+    let that = this;
     if (this.data.access_token) {
       wx.request({
         url: 'https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=' + this.data.access_token,
@@ -100,10 +101,10 @@ Page({
         },
         success: function (e) {
           if (e.statusCode == 200) {
-            var array = e.data.words_result;
+            let array = e.data.words_result;
             if (array) {
-              var text = "";
-              for (var i = 0; i < e.data.words_result_num; i++)
+              let text = "";
+              for (let i = 0; i < e.data.words_result_num; i++)
                 text += array[i].words + "\n";
               that.setQuestion(text);
             } else if (e.data.error_code == 111)
@@ -129,25 +130,25 @@ Page({
     }
   },
   bindFormSubmit: function (res) { //查询答案
+    let that = this;
     if (app.data.num > 0) {
-      var that = this;
-      var res = res.detail.value.textarea;
+      res = res.detail.value.textarea;
       if (res != "") {
         app.data.question = res;
         wx.showLoading({
           title: '正在查询',
         })
-        var res = res.split("\n");
-        for (var i = 0; i < res.length; i++) {
+        res = res.split("\n");
+        for (let i = 0; i < res.length; i++) {
           if (res[i] == "") {
             res.splice(i, 1);
             i--;
             continue;
           }
           res[i] = res[i].trim();
-          var tmp = res[i].split("\u00A0");
+          let tmp = res[i].split("\u00A0");
           res[i] = "";
-          for (var j = 0; j < tmp.length; j++)
+          for (let j = 0; j < tmp.length; j++)
             res[i] += tmp[j];
         }
         let req = true;
@@ -171,9 +172,9 @@ Page({
               if (e.statusCode == 200) {
                 if (Array.isArray(e.data) == true) {
                   wx.hideLoading()
-                  var answerslist = [];
-                  for (var i = 0; i < res.length; i++) {
-                    var anss = new Object();
+                  let answerslist = [];
+                  for (let i = 0; i < res.length; i++) {
+                    let anss = new Object();
                     anss.input = res[i];
                     anss.answers = e.data[i].answers
                     answerslist[i] = anss
@@ -181,8 +182,8 @@ Page({
                   wx.getStorage({
                     key: 'history',
                     success: function (res) {
-                      var quesdata = res.data;
-                      for (var i = 0; i < answerslist.length; i++)
+                      let quesdata = res.data;
+                      for (let i = 0; i < answerslist.length; i++)
                         quesdata.unshift(answerslist[i])
                       if (quesdata.length < 101)
                         wx.setStorage({
@@ -236,11 +237,17 @@ Page({
           })
         }
       }
-    } else
-      wx.showToast({
+    } else {
+      wx.showModal({
         title: '积分不足',
-        icon: "none"
+        content: '是否通过观看广告来获取积分？',
+        success(res) {
+          if (res.confirm) {
+            that.openAd();
+          }
+        }
       })
+    }
   },
   onShareAppMessage: function () {
     return {
@@ -252,7 +259,7 @@ Page({
     wx.showLoading({
       title: '获取通知中',
     })
-    var that = this;
+    let that = this;
     wx.request({
       url: app.data.requestUrl + "getNotice/notice",
       method: "POST",
@@ -280,7 +287,28 @@ Page({
     // 在页面onLoad回调事件中创建插屏广告实例
     this.interstitialAd = wx.createInterstitialAd({
       adUnitId: 'adunit-2bb2a69f9a978b6b'
-    })
+    });
+    this.data.rewardedVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-6b662195440f652e'
+    });
+    this.data.rewardedVideoAd.onError((e) => {
+      if (e.errCode == 1004) {
+        app.data.num++;
+        that.setData({
+          num: app.data.num
+        });
+        that.changeNum();
+      }
+    });
+    this.data.rewardedVideoAd.onClose((res) => {
+      if (res.isEnded) {
+        app.data.num += 5;
+        that.setData({
+          num: app.data.num
+        });
+        that.changeNum();
+      }
+    });
   },
   problem: function () {
     wx.navigateTo({
@@ -288,7 +316,7 @@ Page({
     })
   },
   bugreport: function (e) {
-    var that = this;
+    let that = this;
     wx.request({
       url: app.data.requestUrl + "serverReporter",
       method: "POST",
@@ -316,5 +344,12 @@ Page({
         }
       })
     }
-  },
+  }, openAd: function (e) {
+    this.data.rewardedVideoAd.onLoad();
+    this.data.rewardedVideoAd.show().catch(() => {
+      // 失败重试
+      this.data.rewardedVideoAd.load()
+        .then(() => this.data.rewardedVideoAd.show())
+    })
+  }
 })

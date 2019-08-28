@@ -9,7 +9,7 @@ Page({
     show: true
   },
   del: function (e) {
-    var that = this
+    let that = this
     wx.showModal({
       title: '确认删除',
       content: '确定要删除此条记录吗？',
@@ -104,19 +104,12 @@ Page({
     })
     var list = wx.getStorageSync("history");
     if (list.length != 0) {
-      for (var i = 0; i < list.length; i++) {
-        list[i].height = Math.ceil(list[i].input.length / 19) * 80
-        for (var j = 0; j < list[i].answers.length; j++) {
-          list[i].answers[j].qheight = Math.ceil(list[i].answers[j].question.length / 20) * 70;
-          list[i].answers[j].aheight = Math.ceil(list[i].answers[j].answer.length / 21) * 60;
-        }
-      }
       this.setData({
         list: list,
         show: false
       })
-      wx.hideLoading();
     }
+    wx.hideLoading();
   },
 
   /**

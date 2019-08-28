@@ -12,6 +12,4 @@
   </form>
   <text class='notice'>{{notice}}
   </text>
-  <official-account></official-account>
-  <ad class='ad' unit-id="adunit-3330782628e23e17"></ad>
 </view>

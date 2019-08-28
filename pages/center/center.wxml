@@ -28,7 +28,6 @@
       <image src="../../icons/gengduo.png" mode="aspectFit"></image>
       <text>关于我们</text>
     </navigator>
-    <button open-type="contact">联系客服</button>
   </view>
   <ad unit-id="adunit-3330782628e23e17"></ad>
 </view>

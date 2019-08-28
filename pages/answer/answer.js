@@ -52,14 +52,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var list = getApp().data.answerslist;
-    for (var i = 0; i < list.length; i++) {
-      list[i].height = Math.ceil(list[i].input.length / 20) * 80
-      for (var j = 0; j < list[i].answers.length; j++) {
-        list[i].answers[j].qheight = Math.ceil(list[i].answers[j].question.length / 20) * 70;
-        list[i].answers[j].aheight = Math.ceil(list[i].answers[j].answer.length / 21) * 60;
-      }
-    }
+    let list = getApp().data.answerslist;
     this.setData({
       list: list
     })

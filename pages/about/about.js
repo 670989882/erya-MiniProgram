@@ -6,7 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    about: {}
+    about: null
   },
   copy: function () {
     wx.setClipboardData({
@@ -64,7 +64,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that = this;
+    let that = this;
     wx.request({
       url: app.data.requestUrl + "getNotice/ad",
       method: 'POST',

@@ -10,8 +10,8 @@ App({
   },
   // 监听错误
   onError: function (err) {
-    var that = this;
-    var info = wx.getSystemInfoSync();
+    let that = this;
+    let info = wx.getSystemInfoSync();
     // 上报错误
     wx.request({
       url: this.reqquesUrl,

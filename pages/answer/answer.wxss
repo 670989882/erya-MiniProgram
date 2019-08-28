@@ -1,11 +1,12 @@
 /* pages/answer/answer.wxss */
 
+.container {
+  background: #fbfbfb;
+}
+
 .view {
-  padding: 8rpx;
-  border-radius: 10rpx;
-  background: #eee;
-  margin-top: 14rpx;
-  height: 95%;
+  margin-top: 20rpx;
+  height: 93%;
   width: 95%;
 }
 
@@ -14,8 +15,8 @@
   border-bottom: 1px solid #efefef;
   display: flex;
   align-items: center;
-  padding: 0 15rpx;
-  font-size: 36rpx;
+  padding: 10rpx 8rpx;
+  font-size: 46rpx;
 }
 
 .list_item_name {
@@ -23,28 +24,49 @@
 }
 
 .icon_down {
-  width: 35rpx;
-  height: 35rpx;
+  width: 50rpx;
+  height: 50rpx;
   transition: transform 0.3s;
 }
 
 .list_item_name_box {
   background: #fff;
+  font-size: 40rpx;
   border-bottom: 1px solid #efefef;
-  font-size: 30rpx;
   display: flex;
   align-items: center;
-  padding: 0 25rpx 0 50rpx;
+  padding: 6rpx 10rpx 6rpx 20rpx;
+  color: #292929;
 }
 
 .other {
   display: flex;
-  padding: 0 25rpx 0 50rpx;
+  padding: 0 20rpx 0 20rpx;
   align-items: center;
-  font-size: 30rpx;
+  font-size: 36rpx;
   color: #666;
 }
 
 .icon_down_rotate {
   transform: rotate(-90deg);
+}
+
+.unhistory {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #7a7a7a;
+}
+
+.list {
+  word-break:break-all;
+  margin-bottom: 12rpx;
+}
+
+.tips{
+  font-size: 34rpx;
+  color: #7A7A7A
 }

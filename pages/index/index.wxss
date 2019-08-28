@@ -6,12 +6,13 @@
 }
 
 .textarea {
+  font-size: 34rpx;
   padding: 8rpx;
   margin-top: 18rpx;
   border-radius: 20rpx;
-  background: #eee;
+  background: rgb(246,246,246);
   width: 97%;
-  height: 300rpx;
+  height: 400rpx;
 }
 
 .btn {
@@ -23,9 +24,9 @@
   font-size: 28rpx;
   border-radius: 20rpx;
   margin-top: 18rpx;
-  background: #eee;
+  background: rgb(246,246,246);
   width: 93%;
-  color: rgb(44, 39, 33);
+  color: rgb(4,4, 39, 33);
 }
 
 .cbvalue {
@@ -52,6 +53,3 @@
   color: rgb(141, 127, 127);
 }
 
-.ad {
-  margin-top: 2rpx;
-}

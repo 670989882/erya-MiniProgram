@@ -7,7 +7,7 @@ Page({
    */
   data: {
     num: 0,
-    rewardedVideoAd: ""
+    rewardedVideoAd: null
   },
   connection: function () {
     wx.showModal({
@@ -65,14 +65,17 @@ Page({
       })
     }
   },
-  openAd:function(e){
+  openAd: function (e) {
     this.data.rewardedVideoAd.onLoad();
     this.data.rewardedVideoAd.show().catch(() => {
       // 失败重试
       this.data.rewardedVideoAd.load()
         .then(() => this.data.rewardedVideoAd.show())
     })
-  },refresh:function(e){
+  }, refresh: function (e) {
+    wx.showLoading({
+      title: '获取中',
+    })
     let that = this;
     wx.login({
       success(res) {
@@ -84,14 +87,23 @@ Page({
             data: {
               code: res.code
             }, success: function (res) {
-              app.data.openid = res.data.openid;
-              app.data.num = res.data.num;
-              that.setData({
-                num:res.data.num
-              })
+              if (res.statusCode == 200) {
+                app.data.openid = res.data.openid;
+                app.data.num = res.data.num;
+                that.setData({
+                  num: res.data.num
+                });
+              }
+              wx.hideLoading();
             }
           })
         }
+      }, fail(res) {
+        wx.hideLoading();
+        wx.showToast({
+          title: '获取失败',
+          image:'../../icons/error.png'
+        })
       }
     })
   },
