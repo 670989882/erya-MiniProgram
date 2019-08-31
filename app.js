@@ -1,7 +1,8 @@
 App({
   data: {
-    requestUrl: 'https://erya.ychstudy.cn/',
+   requestUrl: 'https://erya.ychstudy.cn/',
     //requestUrl:'http://localhost:8081/erya_war/',
+    //requestUrl:'http://192.168.137.1:8081/erya_war/',
     openid: "",
     num: 0,
     question: "",

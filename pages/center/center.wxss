@@ -16,8 +16,8 @@
 .picture {
   margin-top: 30rpx;
   margin-bottom: 10rpx;
-  height: 170rpx;
-  width: 170rpx;
+  height: 180rpx;
+  width: 180rpx;
   border-radius: 50%;
   overflow: hidden;
 }

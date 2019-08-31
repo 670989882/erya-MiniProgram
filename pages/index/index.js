@@ -7,7 +7,9 @@ Page({
     checked: true,
     tempFile: null,
     interstitialAd: null,
-    rewardedVideoAd: null
+    rewardedVideoAd: null,
+    recorderManager: null,
+    microphone: false
   },
   setQuestion: function (text) { //将问题送回textarea
     if (this.data.checked) {
@@ -101,6 +103,7 @@ Page({
         },
         success: function (e) {
           if (e.statusCode == 200) {
+            wx.hideLoading();
             let array = e.data.words_result;
             if (array) {
               let text = "";
@@ -189,7 +192,8 @@ Page({
                         wx.setStorage({
                           key: 'history',
                           data: quesdata,
-                        }); else
+                        });
+                      else
                         wx.setStorage({
                           key: 'history',
                           data: quesdata.slice(0, 100),
@@ -236,7 +240,11 @@ Page({
             }
           })
         }
-      }
+      } else
+        wx.showToast({
+          title: '请输入题目',
+          icon: 'none'
+        })
     } else {
       wx.showModal({
         title: '积分不足',
@@ -326,14 +334,16 @@ Page({
         "time": require('../../utils/util.js').formatTime(new Date())
       }
     })
-  }, onShow: function (e) {
+  },
+  onShow: function (e) {
     if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
       if (this.interstitialAd) {
         this.interstitialAd.show();
         app.data.interstitialAd = false;
       }
     }
-  }, changeNum: function () {
+  },
+  changeNum: function () {
     if (app.data.openid != "") {
       wx.request({
         method: "POST",
@@ -344,12 +354,122 @@ Page({
         }
       })
     }
-  }, openAd: function (e) {
+  },
+  openAd: function (e) {
     this.data.rewardedVideoAd.onLoad();
     this.data.rewardedVideoAd.show().catch(() => {
       // 失败重试
       this.data.rewardedVideoAd.load()
         .then(() => this.data.rewardedVideoAd.show())
     })
+  },
+  statredRecord(res) {
+    let that = this;
+    if (!this.data.microphone) {
+      this.getAuthorization(res);
+    } else {
+      // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+      let recorderManager;
+      if (this.data.recorderManager == null) {
+        recorderManager = wx.getRecorderManager();
+        that.data.recorderManager = recorderManager;
+      } else
+        recorderManager = this.data.recorderManager;
+      recorderManager.onStart(() => wx.showToast({
+        title: '倾听中',
+        image: '../../icons/voicing.png',
+        duration: 60000
+      }))
+      recorderManager.onStop((res) => {
+        wx.hideToast();
+        that.data.recorderManager = null;
+        that.requestText(res.tempFilePath);
+      })
+      recorderManager.onError((e) => {
+        if (e.errMsg == "operateRecorder:fail auth deny") {
+          that.getAuthorization(res)
+        }
+      })
+      const options = {
+        duration: 60000,
+        sampleRate: 16000,
+        numberOfChannels: 1,
+        encodeBitRate: 48000,
+        format: 'mp3'
+      }
+      recorderManager.start(options);
+    }
+  },
+  endedRecord() {
+    if (this.data.recorderManager) {
+      this.data.recorderManager.stop();
+    }
+  },
+  requestText(tempFilePath) {
+    let that = this;
+    wx.showLoading({
+      title: '识别中',
+    })
+    wx.uploadFile({
+      url: app.data.requestUrl + 'voice/text',
+      filePath: tempFilePath,
+      header: {
+        'content-type': 'multipart/form-data'
+      },
+      name: 'voice',
+      success(res) {
+        if (res.statusCode != 200 || !res.data || res.data == "") {
+          wx.hideLoading();
+          wx.showToast({
+            title: '未识别到结果',
+            icon: 'none'
+          })
+        }
+        else {
+          wx.hideLoading();
+          that.setData({
+            questions: that.data.questions + res.data
+          })
+        }
+      }
+    })
+  }, getAuthorization(res) {
+    if (!this.data.lock) {
+      this.setData({
+        lock: true
+      }
+      )
+      let that = this;
+      wx.getSetting({
+        success(res) {
+          if (res.authSetting['scope.record']) {
+            wx.authorize({
+              scope: 'scope.record',
+              success() {
+                that.setData({
+                  microphone: true,
+                  lock: false
+                })
+                that.statredRecord(res);
+              }
+            })
+          } else {
+            wx.showModal({
+              title: '需要授权',
+              content: '我们需要录音权限',
+              success(res) {
+                if (res.confirm) {
+                  wx.openSetting()
+                }
+              }, complete() {
+                that.setData({
+                  lock: false
+                })
+              }
+            })
+          }
+        }
+      })
+    }
   }
 })
