@@ -6,6 +6,7 @@ App({
     openid: "",
     num: 0,
     question: "",
+    voice:"",
     answerslist: [],
     interstitialAd: false
   },
@@ -43,5 +44,6 @@ App({
         }
       }
     })
+    that.data.voice = wx.getStorageSync("voice");
   }
 })

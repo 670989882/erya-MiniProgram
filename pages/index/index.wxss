@@ -61,5 +61,8 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-color: #888;
+  font-size: 36rpx;
+  color: rgb(88, 88, 88);
+  font-weight: 400;
+  /* font-family: "宋体" */
 }
