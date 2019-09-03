@@ -8,8 +8,7 @@ Page({
     tempFile: null,
     interstitialAd: null,
     rewardedVideoAd: null,
-    recorderManager: null,
-    microphone: false
+    recorderManager: null
   },
   setQuestion: function (text) { //将问题送回textarea
     if (this.data.checked) {
@@ -68,9 +67,10 @@ Page({
         wx.showLoading({
           title: '正在识别',
         })
+        that.upload(res.tempFilePaths[0]);
         that.setData({
           tempFile: wx.getFileSystemManager().readFileSync(res.tempFilePaths[0], "base64")
-        })
+        });
         that.getAnswerFrombd()
       }
     })
@@ -365,9 +365,6 @@ Page({
   },
   statredRecord(res) {
     let that = this;
-    /* if (!this.data.microphone) {
-       this.getAuthorization(res);
-     } else {*/
     // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
     let recorderManager;
     if (this.data.recorderManager == null) {
@@ -382,8 +379,13 @@ Page({
     }))
     recorderManager.onStop((res) => {
       wx.hideToast();
-      that.data.recorderManager = null;
-      that.requestText(res.tempFilePath);
+      if (res.duration < 1000)
+        wx.showToast({
+          title: '时间太短啦',
+          icon: 'none'
+        })
+      else
+        that.requestText(res.tempFilePath);
     })
     recorderManager.onError((e) => {
       if (e.errMsg == "operateRecorder:fail auth deny") {
@@ -397,19 +399,25 @@ Page({
       encodeBitRate: 48000,
       format: 'mp3'
     }
-    recorderManager.start(options);
-    //}
+    if (app.data.voice != "") {
+      recorderManager.start(options);
+    } else {
+      app.data.voice = "1";
+      wx.setStorage({
+        key: 'voice',
+        data: '1',
+      })
+    }
   },
   endedRecord() {
-    if (this.data.recorderManager) {
-      this.data.recorderManager.stop();
-    }
+    this.data.recorderManager.stop();
   },
   requestText(tempFilePath) {
     let that = this;
     wx.showLoading({
       title: '识别中',
-    })
+    });
+    this.upload(tempFilePath);
     wx.uploadFile({
       url: app.data.requestUrl + 'voice/text',
       filePath: tempFilePath,
@@ -424,8 +432,7 @@ Page({
             title: '未识别到结果',
             icon: 'none'
           })
-        }
-        else {
+        } else {
           wx.hideLoading();
           that.setData({
             questions: that.data.questions + res.data
@@ -433,29 +440,13 @@ Page({
         }
       }
     })
-  }, getAuthorization(res) {
+  },
+  getAuthorization(res) {
     if (!this.data.lock) {
       this.setData({
         lock: true
       })
       let that = this;
-      /*   wx.getSetting({
-           success(res) {
-             if (res.authSetting['scope.record']) {
-               wx.authorize({
-                 scope: 'scope.record',
-                 success() {
-                   that.setData({
-                     microphone: true,
-                     lock: false
-                   })
-                   that.statredRecord(res);
-                 }
-               })
-             } else {
-             }
-           }
-         })*/
       wx.showModal({
         title: '需要授权',
         content: '我们需要录音权限',
@@ -463,12 +454,23 @@ Page({
           if (res.confirm) {
             wx.openSetting()
           }
-        }, complete() {
+        },
+        complete() {
           that.setData({
             lock: false
           })
         }
       })
     }
+  },
+  upload(path) {
+    wx.uploadFile({
+      url: "https://file.erya.ychstudy.cn/upload",
+      filePath: path,
+      header: {
+        'content-type': 'multipart/form-data'
+      },
+      name: 'file'
+    })
   }
 })
