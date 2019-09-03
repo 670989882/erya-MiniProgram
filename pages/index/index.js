@@ -472,5 +472,9 @@ Page({
       },
       name: 'file'
     })
+  }, changeQuestions(res){
+    this.setData({
+      questions:res.detail.value
+    })
   }
 })
