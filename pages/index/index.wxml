@@ -11,7 +11,7 @@
         <checkbox value="question" color="#f7982a" checked="{{checked}}" bindtap='checkboxChange' />
         <text>智能提取图片中的题目</text>
       </view>
-      <view bindtouchstart='statredRecord' bindtouchend='endedRecord' class='otherItem' style='margin-right:10rpx'>
+      <view bindtouchstart='statredRecord' bindtouchend='endedRecord' class='otherItem mirc' style='margin-right:10rpx'>
         <image src='../../icons/voice.png' style='width:50rpx;height:50rpx;'></image>
         <text>按住说话</text>
       </view>

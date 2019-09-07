@@ -160,7 +160,13 @@ Page({
   onShareAppMessage: function () {
     return {
       title: '网课答案查询',
-      path: 'pages/index/index'
+      path: 'pages/index/index',
+      success() {
+        wx.showToast({
+          title: '分享成功，积分+5',
+          icon: 'none'
+        })
+      }
     }
   }
 })

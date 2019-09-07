@@ -62,11 +62,22 @@
 }
 
 .list {
-  word-break:break-all;
+  word-break: break-all;
   margin-bottom: 12rpx;
 }
 
-.tips{
+.tips {
   font-size: 34rpx;
-  color: #7A7A7A
+  color: #7a7a7a;
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #bebebe;
 }

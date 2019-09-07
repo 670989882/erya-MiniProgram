@@ -1,7 +1,7 @@
 <!--pages/history/history.wxml-->
 <view class='container'>
   <view class='tips'>
-    <text>只能存储最近100条历史记录哦！</text>
+    <text>只能存储最近30条历史记录哦！</text>
     <text bindtap='delall'>全部删除</text>
   </view>
   <scroll-view scroll-y class="view">

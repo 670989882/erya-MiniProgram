@@ -23,7 +23,6 @@ Page({
             })
         }
       }
-
     })
   },
   /**
@@ -37,7 +36,7 @@ Page({
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
         app.data.num++;
-        that.setData({
+        app.setData({
           num: app.data.num
         });
         that.changeNum();
@@ -45,15 +44,19 @@ Page({
     });
     this.data.rewardedVideoAd.onClose((res) => {
       if (res.isEnded) {
-        app.data.num += 5;
+        app.data.num += 30;
+        wx.showToast({
+          title: '观看成功,积分加30',
+          icon: 'none'
+        })
         that.setData({
           num: app.data.num
-        });
+        })
         that.changeNum();
       }
     });
-  },
-  changeNum: function () {
+  }, changeNum: function () {
+    let that = this;
     if (app.data.openid != "") {
       wx.request({
         method: "POST",
@@ -102,7 +105,7 @@ Page({
         wx.hideLoading();
         wx.showToast({
           title: '获取失败',
-          image:'../../icons/error.png'
+          image: '../../icons/error.png'
         })
       }
     })
@@ -157,7 +160,13 @@ Page({
   onShareAppMessage: function () {
     return {
       title: '网课答案查询',
-      path: 'pages/index/index'
+      path: 'pages/index/index',
+      success() {
+        wx.showToast({
+          title: '分享成功，积分+5',
+          icon: 'none'
+        })
+      }
     }
   }
 })

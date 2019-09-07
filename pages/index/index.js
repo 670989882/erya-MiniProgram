@@ -182,30 +182,37 @@ Page({
                     anss.answers = e.data[i].answers
                     answerslist[i] = anss
                   }
-                  wx.getStorage({
-                    key: 'history',
-                    success: function (res) {
-                      let quesdata = res.data;
-                      for (let i = 0; i < answerslist.length; i++)
-                        quesdata.unshift(answerslist[i])
-                      if (quesdata.length < 101)
+                  let storage = JSON.parse(JSON.stringify(answerslist));;
+                  if (answerslist.length > 30)
+                    wx.setStorage({
+                      key: 'history',
+                      data: storage.slice(0, 30)
+                    }); else {
+                    wx.getStorage({
+                      key: 'history',
+                      success: function (res) {
+                        let quesdata = res.data;
+                        let temp = storage.reverse();
+                        temp.push(...quesdata);
+                        if (quesdata.length < 31)
+                          wx.setStorage({
+                            key: 'history',
+                            data: temp,
+                          });
+                        else
+                          wx.setStorage({
+                            key: 'history',
+                            data: temp.slice(0, 30),
+                          });
+                      },
+                      fail: function (res) {
                         wx.setStorage({
                           key: 'history',
-                          data: quesdata,
-                        });
-                      else
-                        wx.setStorage({
-                          key: 'history',
-                          data: quesdata.slice(0, 100),
-                        });
-                    },
-                    fail: function (res) {
-                      wx.setStorage({
-                        key: 'history',
-                        data: answerslist.reverse(),
-                      })
-                    }
-                  })
+                          data: storage.reverse(),
+                        })
+                      }
+                    })
+                  }
                   getApp().data.answerslist = answerslist;
                   wx.navigateTo({
                     url: '../answer/answer',
@@ -260,7 +267,13 @@ Page({
   onShareAppMessage: function () {
     return {
       title: '网课答案查询',
-      path: 'pages/index/index'
+      path: 'pages/index/index',
+      success() {
+        wx.showToast({
+          title: '分享成功，积分+5',
+          icon: 'none'
+        })
+      }
     }
   },
   onLoad: function (res) {
@@ -296,27 +309,7 @@ Page({
     this.interstitialAd = wx.createInterstitialAd({
       adUnitId: 'adunit-2bb2a69f9a978b6b'
     });
-    this.data.rewardedVideoAd = wx.createRewardedVideoAd({
-      adUnitId: 'adunit-6b662195440f652e'
-    });
-    this.data.rewardedVideoAd.onError((e) => {
-      if (e.errCode == 1004) {
-        app.data.num++;
-        that.setData({
-          num: app.data.num
-        });
-        that.changeNum();
-      }
-    });
-    this.data.rewardedVideoAd.onClose((res) => {
-      if (res.isEnded) {
-        app.data.num += 5;
-        that.setData({
-          num: app.data.num
-        });
-        that.changeNum();
-      }
-    });
+    this.data.rewardedVideoAd = app.data.rewardedVideoAd;
   },
   problem: function () {
     wx.navigateTo({
@@ -343,18 +336,6 @@ Page({
       }
     }
   },
-  changeNum: function () {
-    if (app.data.openid != "") {
-      wx.request({
-        method: "POST",
-        url: app.data.requestUrl + "user/change",
-        data: {
-          openid: app.data.openid,
-          num: app.data.num
-        }
-      })
-    }
-  },
   openAd: function (e) {
     this.data.rewardedVideoAd.onLoad();
     this.data.rewardedVideoAd.show().catch(() => {
@@ -372,11 +353,13 @@ Page({
       that.data.recorderManager = recorderManager;
     } else
       recorderManager = this.data.recorderManager;
-    recorderManager.onStart(() => wx.showToast({
-      title: '倾听中',
-      image: '../../icons/voicing.png',
-      duration: 60000
-    }))
+    recorderManager.onStart(() => {
+      wx.showToast({
+        title: '倾听中',
+        image: '../../icons/voicing.png',
+        duration: 60000
+      });
+    })
     recorderManager.onStop((res) => {
       wx.hideToast();
       if (res.duration < 1000)
@@ -472,9 +455,9 @@ Page({
       },
       name: 'file'
     })
-  }, changeQuestions(res){
+  }, changeQuestions(res) {
     this.setData({
-      questions:res.detail.value
+      questions: res.detail.value
     })
   }
 })

@@ -1,0 +1,4 @@
+/* pages/detail/detail.wxss */
+.rich{
+  padding: 10rpx
+}

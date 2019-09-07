@@ -5,7 +5,9 @@
     "pages/answer/answer",
     "pages/problem/problem",
     "pages/about/about",
-    "pages/history/history"
+    "pages/history/history",
+    "pages/course/course",
+    "pages/detail/detail"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -24,6 +26,12 @@
         "iconPath": "icons/index.png",
         "selectedIconPath": "icons/indexfill.png",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/course/course",
+        "iconPath": "icons/course.png",
+        "selectedIconPath": "icons/course.png",
+        "text": "课程"
       },
       {
         "pagePath": "pages/center/center",

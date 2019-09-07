@@ -1,53 +1,43 @@
-// pages/problem/problem.js
+// pages/detail/detail.js
+let app = getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    question: "请写下您的题目。",
-    desc: "请说出您遇到的问题。"
+    id: 0,
+    content: '',
+    name: ''
   },
-  bindFormSubmit: function (res) {
-    if (res.detail.value.textarea) {
-      wx.showLoading({
-        title: '正在反馈',
-      })
-      wx.request({
-        url: app.data.requestUrl + "problem",
-        method: "POST",
-        data: {
-          time: require('../../utils/util.js').formatTime(new Date()),
-          problem: res.detail.value.textarea
-        },
-        success: function (e) {
-          wx.hideLoading()
-          wx.showToast({
-            title: '反馈成功',
-            icon: 'success'
-          })
-          setTimeout(function () {
-            wx.navigateBack();
-          }, 1600);
-        }
-      })
-    }
-  },
-  onShareAppMessage: function () {
-    return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
-    }
-  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (options.method == "question") {
-      this.setData({
-        desc: this.data.question
-      })
-    }
+    let that = this;
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx.request({
+      url: app.data.requestUrl + 'course/getCourse/' + options.id,
+      method: "POST",
+      header: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      success(res) {
+        that.setData({
+          id: options.id,
+          name: res.data.name,
+          content: res.data.content
+        })
+        wx.setNavigationBarTitle({
+          title: that.data.name //页面标题为路由参数
+        });
+      }, complete() {
+        wx.hideLoading()
+      }
+    })
   },
 
   /**

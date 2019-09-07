@@ -66,3 +66,12 @@
   font-weight: 400;
   /* font-family: "宋体" */
 }
+
+.mirc{
+  background-color: rgb(240, 240, 240);
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+  padding-top: 8rpx;
+  padding-bottom: 8rpx;
+  border-radius: 20px;
+}

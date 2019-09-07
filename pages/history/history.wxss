@@ -72,6 +72,17 @@
 }
 
 .list {
-  word-break:break-all;
+  word-break: break-all;
   margin-bottom: 12rpx;
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #bebebe;
 }
