@@ -8,7 +8,6 @@ App({
     voice: "",
     answerslist: [],
     interstitialAd: false,
-    rewardedVideoAd:null
   },
   // 监听错误
   onError: function (err) {
@@ -45,26 +44,6 @@ App({
       }
     })
     that.data.voice = wx.getStorageSync("voice");
-    this.data.rewardedVideoAd = wx.createRewardedVideoAd({
-      adUnitId: 'adunit-6b662195440f652e'
-    });
-    this.data.rewardedVideoAd.onError((e) => {
-      console.log(e)
-      if (e.errCode == 1004) {
-        that.data.num++;
-        that.changeNum();
-      }
-    });
-    this.data.rewardedVideoAd.onClose((res) => {
-      if (res.isEnded) {
-        that.data.num += 30;
-        wx.showToast({
-          title: '观看成功,积分加30',
-          icon: 'none'
-        })
-        that.changeNum();
-      }
-    });
   }, changeNum: function () {
     let that = this;
     if (that.data.openid != "") {

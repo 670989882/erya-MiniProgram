@@ -2,11 +2,12 @@
 
 .form {
   margin-top: 50rpx;
-  width: 95%;
+  width: 92%;
 }
 
 .ta {
-  width: 100%;
+  padding: 8rpx;
+  width: 97%;
   background-color: #eee;
   border-radius: 17rpx;
 }

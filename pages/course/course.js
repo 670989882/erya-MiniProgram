@@ -15,6 +15,9 @@ Page({
     pageTotal: 0,
     rewardedVideoAd:null
   }, requestData() {
+    wx.showLoading({
+      title: '加载中',
+    })
     let that = this;
     wx.request({
       url: app.data.requestUrl + 'course/1/' + that.data.pageSize,
@@ -40,6 +43,8 @@ Page({
             hideLoading: true
           })
         }
+      },complete(){
+        wx.hideLoading()
       }
     })
   }, searchChanged(res) {
@@ -53,7 +58,7 @@ Page({
     } else {
       if (this.data.hideLoading) {
         this.setData({
-          hidedLoading: false
+          hideLoading: false,
         });
         let that = this;
         let pageNo = (that.data.pageNo + 1);
@@ -92,20 +97,10 @@ Page({
         }
       })
      } else {
+       app.data.num--;
+       app.changeNum();
       wx.navigateTo({
         url: '../detail/detail?id=' + res.target.dataset.id,
-      })
-    }
-  }, changeNum: function () {
-    let that = this;
-    if (that.data.openid != "") {
-      wx.request({
-        method: "POST",
-        url: app.data.requestUrl + "user/change",
-        data: {
-          openid: that.data.openid,
-          num: that.data.num
-        }
       })
     }
   }, openAd: function (e) {
@@ -128,17 +123,17 @@ Page({
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
         app.data.num++;
-        that.changeNum();
+        app.changeNum();
       }
     });
     this.data.rewardedVideoAd.onClose((res) => {
       if (res.isEnded) {
         app.data.num += 30;
         wx.showToast({
-          title: '观看成功,积分加30',
+          title: '观看成功,积分+30',
           icon: 'none'
         })
-        that.changeNum();
+        app.changeNum();
       }
     });
   },

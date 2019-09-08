@@ -39,7 +39,7 @@ Page({
         app.setData({
           num: app.data.num
         });
-        that.changeNum();
+        app.changeNum();
       }
     });
     this.data.rewardedVideoAd.onClose((res) => {
@@ -52,21 +52,9 @@ Page({
         that.setData({
           num: app.data.num
         })
-        that.changeNum();
+        app.changeNum();
       }
     });
-  }, changeNum: function () {
-    let that = this;
-    if (app.data.openid != "") {
-      wx.request({
-        method: "POST",
-        url: app.data.requestUrl + "user/change",
-        data: {
-          openid: app.data.openid,
-          num: app.data.num
-        }
-      })
-    }
   },
   openAd: function (e) {
     this.data.rewardedVideoAd.onLoad();

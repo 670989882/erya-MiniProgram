@@ -1,9 +1,5 @@
 /* pages/history/history.wxss */
 
-.container {
-  background: #fbfbfb;
-}
-
 .view {
   margin-top: 0rpx;
   height: 92%;

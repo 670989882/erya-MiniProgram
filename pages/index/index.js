@@ -221,7 +221,7 @@ Page({
                     questions: ""
                   })
                   app.data.num--;
-                  that.changeNum();
+                  app.changeNum();
                 } else {
                   wx.hideLoading();
                   wx.showToast({
@@ -309,7 +309,25 @@ Page({
     this.interstitialAd = wx.createInterstitialAd({
       adUnitId: 'adunit-2bb2a69f9a978b6b'
     });
-    this.data.rewardedVideoAd = app.data.rewardedVideoAd;
+    this.data.rewardedVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-6b662195440f652e'
+    });
+    this.data.rewardedVideoAd.onError((e) => {
+      if (e.errCode == 1004) {
+        that.data.num++;
+        that.changeNum();
+      }
+    });
+    this.data.rewardedVideoAd.onClose((res) => {
+      if (res.isEnded) {
+        that.data.num += 30;
+        wx.showToast({
+          title: '观看成功,积分加30',
+          icon: 'none'
+        })
+        that.changeNum();
+      }
+    });
   },
   problem: function () {
     wx.navigateTo({

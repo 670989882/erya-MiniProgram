@@ -7,10 +7,10 @@
 
 .textarea {
   font-size: 34rpx;
-  padding: 8rpx;
+  padding: 12rpx;
   margin-top: 18rpx;
   border-radius: 20rpx;
-  background: rgb(246, 246, 246);
+  background: white;
   width: 97%;
   height: 450rpx;
 }
@@ -20,11 +20,11 @@
 }
 
 .notice {
-  padding: 5rpx;
+  padding: 8rpx;
   font-size: 28rpx;
   border-radius: 20rpx;
   margin-top: 18rpx;
-  background: rgb(246, 246, 246);
+  background: #ebebeb;
   width: 93%;
   color: rgb(4, 4, 39, 33);
 }
@@ -68,7 +68,7 @@
 }
 
 .mirc{
-  background-color: rgb(240, 240, 240);
+  background-color: #ebebeb;
   padding-left: 20rpx;
   padding-right: 20rpx;
   padding-top: 8rpx;

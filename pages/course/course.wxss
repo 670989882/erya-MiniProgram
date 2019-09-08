@@ -2,9 +2,7 @@
 
 .form {
   width: 100%;
-  margin-top: 30rpx;
-  margin-bottom: 30rpx;
-  height: 80rpx;
+  height: 10%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -13,17 +11,20 @@
 }
 
 .input {
-  height: 78rpx;
+  height: 75%;
   width: 550rpx;
   margin-left: 18rpx;
-  background-color: rgb(246, 246, 246);
   border-radius: 20rpx;
+  background-color: white;
 }
 
 .btn {
-  text-align: center;
-  line-height: 80rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 150rpx;
+  height: 70%;
   margin-right: 14rpx;
   border-radius: 10rpx;
   background-color: #f7982a;
@@ -31,7 +32,7 @@
 }
 
 .courses {
- height: 90%;
+ height: 88%;
 }
 
 .none {
@@ -45,13 +46,15 @@
 }
 
 .item {
+  padding-bottom: 16rpx;
+  padding-top: 16rpx;
   margin-left: 16rpx;
   margin-right: 16rpx; 
   margin-bottom: 20rpx;
   font-size: 40rpx;
   padding: 10rpx;
   border-radius: 20rpx;
-  background-color: rgb(246, 246, 246);
+  background-color: white;
 }
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/

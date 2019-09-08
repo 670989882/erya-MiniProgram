@@ -1,9 +1,5 @@
 /* pages/answer/answer.wxss */
 
-.container {
-  background: #fbfbfb;
-}
-
 .view {
   margin-top: 20rpx;
   height: 93%;

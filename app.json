@@ -19,7 +19,7 @@
     "color": "#333",
     "selectedColor": "#f7982a",
     "backgroundColor": "#f6f6f6",
-    "borderStyle": "white",
+    "borderStyle": "black",
     "list": [
       {
         "pagePath": "pages/index/index",
@@ -30,7 +30,7 @@
       {
         "pagePath": "pages/course/course",
         "iconPath": "icons/course.png",
-        "selectedIconPath": "icons/course.png",
+        "selectedIconPath": "icons/coursefill.png",
         "text": "课程"
       },
       {
