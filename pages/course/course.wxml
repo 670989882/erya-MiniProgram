@@ -6,10 +6,12 @@
   </view>
   <scroll-view scroll-y class="courses" bindscrolltolower="loadMoreData">
     <view hidden='{{hidden}}' class='none'>没有找到哦</view>
-    <view wx:for="{{courses}}" wx:key="id" class="item" data-id="{{item.id}}" bindtap='getDetail'>
-      {{item.name}}
+    <view wx:for="{{courses}}" wx:key="id" >
+      <view class="item" data-id="{{item.id}}" bindtap='getDetail'>{{item.name}}</view>
+      <ad unit-id="adunit-3330782628e23e17" wx:if="{{index%10==0}}" class="ad"></ad>
     </view>
   </scroll-view>
+  <view class="tips">答案来源于网络，如有侵权，请联系我们。</view>
   <loading hidden="{{hideLoading}}">
     加载中...
   </loading>

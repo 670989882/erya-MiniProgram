@@ -7,7 +7,7 @@ App({
     question: "",
     voice: "",
     answerslist: [],
-    interstitialAd: false,
+    interstitialAd: false
   },
   // 监听错误
   onError: function (err) {
@@ -15,10 +15,10 @@ App({
     let info = wx.getSystemInfoSync();
     // 上报错误
     wx.request({
-      url: this.reqquesUrl,
+      url: this.requestUrl + "appReporter",
       method: "POST",
       data: {
-        "question": that.data.question + "appReporter",
+        "question": that.data.question,
         "error": JSON.stringify(err),
         "time": require('utils/util.js').formatTime(new Date()),
         "devInfo": info.model + "|" + info.system + "|" + info.version + "|" + info.SDKVersion

@@ -1,5 +1,5 @@
 // pages/detail/detail.js
-let app = getApp()
+const app = getApp()
 Page({
 
   /**
@@ -65,7 +65,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    let app = getApp();
+    app.data.interstitialAd = true;
   },
 
   /**
@@ -88,13 +89,7 @@ Page({
   onShareAppMessage: function () {
     return {
       title: '网课答案查询',
-      path: 'pages/index/index',
-      success() {
-        wx.showToast({
-          title: '分享成功，积分+5',
-          icon: 'none'
-        })
-      }
+      path: 'pages/index/index'
     }
   }
 })

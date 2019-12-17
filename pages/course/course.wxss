@@ -46,14 +46,15 @@
 }
 
 .item {
-  padding-bottom: 16rpx;
-  padding-top: 16rpx;
+  padding-bottom: 30rpx;
+  padding-top: 30rpx;
   margin-left: 16rpx;
   margin-right: 16rpx; 
   margin-bottom: 20rpx;
-  font-size: 40rpx;
-  padding: 10rpx;
-  border-radius: 20rpx;
+  font-size: 30rpx;
+  padding-left: 20rpx;
+  padding-right: 10rpx;
+  border-radius: 40rpx;
   background-color: white;
 }
 
@@ -66,4 +67,15 @@
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #bebebe;
+}
+
+.ad{
+  margin-bottom: 20rpx;
+}
+
+.tips{
+  font-size: 20rpx;
+  margin-bottom: 0rpx;
+  padding-bottom: 0rpx;
+  color: black;
 }

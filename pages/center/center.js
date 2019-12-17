@@ -1,5 +1,5 @@
 // pages/center/center.js
-let app = getApp();
+const app = getApp();
 Page({
 
   /**
@@ -7,7 +7,8 @@ Page({
    */
   data: {
     num: 0,
-    rewardedVideoAd: null
+    rewardedVideoAd: null,
+    adShow:false
   },
   connection: function () {
     wx.showModal({
@@ -30,6 +31,9 @@ Page({
    */
   onLoad: function (options) {
     let that = this;
+    this.setData({
+      adShow: wx.getSystemInfoSync().windowHeight > 570 ? true : false
+    });
     this.data.rewardedVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-6b662195440f652e'
     });
@@ -148,13 +152,7 @@ Page({
   onShareAppMessage: function () {
     return {
       title: '网课答案查询',
-      path: 'pages/index/index',
-      success() {
-        wx.showToast({
-          title: '分享成功，积分+5',
-          icon: 'none'
-        })
-      }
+      path: 'pages/index/index'
     }
   }
 })

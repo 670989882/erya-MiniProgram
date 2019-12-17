@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 330rpx;
+  height: 40%;
   background-color: #f7982a;
 }
 
@@ -14,10 +14,10 @@
 }
 
 .picture {
-  margin-top: 30rpx;
-  margin-bottom: 10rpx;
+  /* margin-top: 30rpx; */
+  margin-top: 17%;
   height: 180rpx;
-  width: 180rpx;
+  width: 180rpx; 
   border-radius: 50%;
   overflow: hidden;
 }

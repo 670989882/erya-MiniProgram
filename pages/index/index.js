@@ -1,4 +1,4 @@
-let app = getApp();
+const app = getApp();
 Page({
   data: {
     questions: "",
@@ -8,7 +8,8 @@ Page({
     tempFile: null,
     interstitialAd: null,
     rewardedVideoAd: null,
-    recorderManager: null
+    recorderManager: null,
+    adShow: false
   },
   setQuestion: function (text) { //将问题送回textarea
     if (this.data.checked) {
@@ -267,29 +268,26 @@ Page({
   onShareAppMessage: function () {
     return {
       title: '网课答案查询',
-      path: 'pages/index/index',
-      success() {
-        wx.showToast({
-          title: '分享成功，积分+5',
-          icon: 'none'
-        })
-      }
+      path: 'pages/index/index'
     }
   },
   onLoad: function (res) {
     wx.showLoading({
       title: '获取通知中',
-    })
+    });
+    this.setData({
+      adShow: wx.getSystemInfoSync().windowHeight > 570 ? true : false
+    });
     let that = this;
     wx.request({
       url: app.data.requestUrl + "getNotice/notice",
       method: "POST",
       success: function (e) {
+        wx.hideLoading();
         if (e.statusCode == 200) {
           that.setData({
             notice: e.data
           })
-          wx.hideLoading();
         } else {
           wx.showToast({
             title: '获取通知失败',
@@ -315,7 +313,7 @@ Page({
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
         that.data.num++;
-        that.changeNum();
+        app.changeNum();
       }
     });
     this.data.rewardedVideoAd.onClose((res) => {
@@ -325,7 +323,7 @@ Page({
           title: '观看成功,积分加30',
           icon: 'none'
         })
-        that.changeNum();
+        app.changeNum();
       }
     });
   },

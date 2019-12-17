@@ -1,5 +1,5 @@
 // pages/course/course.js
-let app = getApp();
+const app = getApp();
 Page({
 
   /**
@@ -9,11 +9,12 @@ Page({
     hidden: true,
     courses: [],
     pageNo: 0,
-    pageSize: 10,
+    pageSize: 20,
     search: "",
     hideLoading: true,
     pageTotal: 0,
-    rewardedVideoAd:null
+    rewardedVideoAd:null,
+    interstitialAd:null
   }, requestData() {
     wx.showLoading({
       title: '加载中',
@@ -100,7 +101,7 @@ Page({
        app.data.num--;
        app.changeNum();
       wx.navigateTo({
-        url: '../detail/detail?id=' + res.target.dataset.id,
+        url: '../detail/detail?id=' + res.currentTarget.dataset.id,
       })
     }
   }, openAd: function (e) {
@@ -116,7 +117,9 @@ Page({
    */
   onLoad: function (options) {
     this.requestData();
-    let that=this;
+    this.interstitialAd = wx.createInterstitialAd({
+      adUnitId: 'adunit-2bb2a69f9a978b6b'
+    });
     this.data.rewardedVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-6b662195440f652e'
     });
@@ -148,7 +151,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
+      if (this.interstitialAd) {
+        this.interstitialAd.show();
+        app.data.interstitialAd = false;
+      }
+    }
   },
 
   /**
@@ -185,13 +193,7 @@ Page({
   onShareAppMessage: function () {
     return {
       title: '网课答案查询',
-      path: 'pages/index/index',
-      success() {
-        wx.showToast({
-          title: '分享成功，积分+5',
-          icon: 'none'
-        })
-      }
+      path: 'pages/index/index'
     }
   }
 })

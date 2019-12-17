@@ -29,5 +29,5 @@
       <text>关于我们</text>
     </navigator>
   </view>
-  <ad unit-id="adunit-3330782628e23e17"></ad>
+  <ad wx-if="{{adShow}}" unit-id="adunit-3330782628e23e17"></ad>
 </view>

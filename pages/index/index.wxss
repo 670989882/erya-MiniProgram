@@ -3,6 +3,7 @@
 .form {
   margin-top: 18rpx;
   width: 95%;
+  height: 60%;
 }
 
 .textarea {
@@ -12,7 +13,8 @@
   border-radius: 20rpx;
   background: white;
   width: 97%;
-  height: 450rpx;
+  /* height: 450rpx; */
+  height: 70%;
 }
 
 .btn {
@@ -68,10 +70,14 @@
 }
 
 .mirc{
-  background-color: #ebebeb;
+  background-color: #f7982a;
   padding-left: 20rpx;
   padding-right: 20rpx;
   padding-top: 8rpx;
   padding-bottom: 8rpx;
   border-radius: 20px;
+}
+
+.ad{
+  margin-top: 20rpx;
 }
