@@ -151,12 +151,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
-      if (this.interstitialAd) {
+    // if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
+    if (app.data.interstitialAd && this.interstitialAd) {
         this.interstitialAd.show();
         app.data.interstitialAd = false;
       }
-    }
+    // }
   },
 
   /**

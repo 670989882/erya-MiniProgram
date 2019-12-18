@@ -1,12 +1,15 @@
 /* pages/about/about.wxss */
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .money {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 60%;
-  width: 100%;
-  height: 100%;
   font-size: 40rpx;
   color: rgb(141, 127, 127);
 }

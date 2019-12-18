@@ -13,8 +13,7 @@
   border-radius: 20rpx;
   background: white;
   width: 97%;
-  /* height: 450rpx; */
-  height: 70%;
+  height: 65%;
 }
 
 .btn {
@@ -70,7 +69,8 @@
 }
 
 .mirc{
-  background-color: #f7982a;
+  background-color: #ffffff;
+  /* background-color: #f7982a; */
   padding-left: 20rpx;
   padding-right: 20rpx;
   padding-top: 8rpx;

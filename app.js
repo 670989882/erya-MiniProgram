@@ -5,7 +5,6 @@ App({
     openid: "",
     num: 0,
     question: "",
-    voice: "",
     answerslist: [],
     interstitialAd: false
   },

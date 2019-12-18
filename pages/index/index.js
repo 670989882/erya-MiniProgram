@@ -11,7 +11,7 @@ Page({
     recorderManager: null,
     adShow: false
   },
-  setQuestion: function (text) { //将问题送回textarea
+  setQuestion: function(text) { //将问题送回textarea
     if (this.data.checked) {
       let tmp = text.split("\n");
       text = "";
@@ -54,17 +54,17 @@ Page({
     })
     wx.hideLoading()
   },
-  checkboxChange: function (e) { //是否智能提取题目
+  checkboxChange: function(e) { //是否智能提取题目
     this.setData({
-      checked: !this.data.checked
+      checked: !this.data.checkedw
     })
   },
-  getPicture: function (e) { //选择图片并且将图片Base64
+  getPicture: function(e) { //选择图片并且将图片Base64
     let that = this;
     wx.chooseImage({
       count: 1, // 默认9
       sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      success: function (res) {
+      success: function(res) {
         wx.showLoading({
           title: '正在识别',
         })
@@ -76,11 +76,11 @@ Page({
       }
     })
   },
-  getAccess_token: function () { //获取百度的access_token
+  getAccess_token: function() { //获取百度的access_token
     let that = this;
     wx.request({
       url: 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=wd0Gi3MVNS3njje62pPSWaWm&client_secret=e8iSc7wsXf5zxpPiK22a8Xe9SyGQHqfq',
-      success: function (e) {
+      success: function(e) {
         if (e.statusCode == 200) {
           that.setData({
             access_token: e.data.access_token
@@ -90,7 +90,7 @@ Page({
       }
     })
   },
-  getAnswerFrombd: function () { //调用百度api获得文字
+  getAnswerFrombd: function() { //调用百度api获得文字
     let that = this;
     if (this.data.access_token) {
       wx.request({
@@ -102,7 +102,7 @@ Page({
         data: {
           image: this.data.tempFile
         },
-        success: function (e) {
+        success: function(e) {
           if (e.statusCode == 200) {
             wx.hideLoading();
             let array = e.data.words_result;
@@ -133,7 +133,7 @@ Page({
       this.getAccess_token();
     }
   },
-  bindFormSubmit: function (res) { //查询答案
+  bindFormSubmit: function(res) { //查询答案
     let that = this;
     if (app.data.num > 0) {
       res = res.detail.value.textarea;
@@ -172,7 +172,7 @@ Page({
             data: {
               question: res
             },
-            success: function (e) {
+            success: function(e) {
               if (e.statusCode == 200) {
                 if (Array.isArray(e.data) == true) {
                   wx.hideLoading()
@@ -188,10 +188,11 @@ Page({
                     wx.setStorage({
                       key: 'history',
                       data: storage.slice(0, 30)
-                    }); else {
+                    });
+                  else {
                     wx.getStorage({
                       key: 'history',
-                      success: function (res) {
+                      success: function(res) {
                         let quesdata = res.data;
                         let temp = storage.reverse();
                         temp.push(...quesdata);
@@ -206,7 +207,7 @@ Page({
                             data: temp.slice(0, 30),
                           });
                       },
-                      fail: function (res) {
+                      fail: function(res) {
                         wx.setStorage({
                           key: 'history',
                           data: storage.reverse(),
@@ -240,7 +241,7 @@ Page({
                 that.bugreport(e);
               }
             },
-            fail: function (e) {
+            fail: function(e) {
               wx.showToast({
                 title: '服务器异常',
                 image: '../../icons/error.png'
@@ -265,13 +266,13 @@ Page({
       })
     }
   },
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
     return {
       title: '网课答案查询',
       path: 'pages/index/index'
     }
   },
-  onLoad: function (res) {
+  onLoad: function(res) {
     wx.showLoading({
       title: '获取通知中',
     });
@@ -282,7 +283,7 @@ Page({
     wx.request({
       url: app.data.requestUrl + "getNotice/notice",
       method: "POST",
-      success: function (e) {
+      success: function(e) {
         wx.hideLoading();
         if (e.statusCode == 200) {
           that.setData({
@@ -296,7 +297,7 @@ Page({
           that.bugreport(e);
         }
       },
-      fail: function (e) {
+      fail: function(e) {
         wx.showToast({
           title: '服务器异常',
           image: '../../icons/error.png'
@@ -327,12 +328,12 @@ Page({
       }
     });
   },
-  problem: function () {
+  problem: function() {
     wx.navigateTo({
       url: '../problem/problem?method=desc',
     })
   },
-  bugreport: function (e) {
+  bugreport: function(e) {
     let that = this;
     wx.request({
       url: app.data.requestUrl + "serverReporter",
@@ -344,15 +345,15 @@ Page({
       }
     })
   },
-  onShow: function (e) {
-    if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
-      if (this.interstitialAd) {
-        this.interstitialAd.show();
-        app.data.interstitialAd = false;
-      }
+  onShow: function(e) {
+    // if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
+    if (app.data.interstitialAd && this.interstitialAd) {
+      this.interstitialAd.show();
+      app.data.interstitialAd = false;
     }
+    // }
   },
-  openAd: function (e) {
+  openAd: function(e) {
     this.data.rewardedVideoAd.onLoad();
     this.data.rewardedVideoAd.show().catch(() => {
       // 失败重试
@@ -366,7 +367,7 @@ Page({
     let recorderManager;
     if (this.data.recorderManager == null) {
       recorderManager = wx.getRecorderManager();
-      that.data.recorderManager = recorderManager;
+      this.data.recorderManager = recorderManager;
     } else
       recorderManager = this.data.recorderManager;
     recorderManager.onStart(() => {
@@ -387,8 +388,9 @@ Page({
         that.requestText(res.tempFilePath);
     })
     recorderManager.onError((e) => {
-      if (e.errMsg == "operateRecorder:fail auth deny") {
-        that.getAuthorization(res)
+      console.log(e)
+      if (e.errMsg == "operateRecorder:fail auth deny" || e.errMsg == "operateRecorder:fail authorize no response") {
+        that.getAuthorization()
       }
     })
     const options = {
@@ -398,15 +400,7 @@ Page({
       encodeBitRate: 48000,
       format: 'mp3'
     }
-    if (app.data.voice != "") {
-      recorderManager.start(options);
-    } else {
-      app.data.voice = "1";
-      wx.setStorage({
-        key: 'voice',
-        data: '1',
-      })
-    }
+    recorderManager.start(options);
   },
   endedRecord() {
     this.data.recorderManager.stop();
@@ -440,7 +434,7 @@ Page({
       }
     })
   },
-  getAuthorization(res) {
+  getAuthorization() {
     if (!this.data.lock) {
       this.setData({
         lock: true
@@ -471,7 +465,8 @@ Page({
       },
       name: 'file'
     })
-  }, changeQuestions(res) {
+  },
+  changeQuestions(res) {
     this.setData({
       questions: res.detail.value
     })

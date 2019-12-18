@@ -1,8 +1,8 @@
 <!--pages/problem/problem.wxml-->
 <view class="container">
+  <ad class='ad'unit-id="adunit-3330782628e23e17"></ad>
   <form class="form" bindsubmit="bindFormSubmit">
     <textarea class="ta" fixed="{{true}}" placeholder="{{desc}}" name="textarea" maxlength="-1" />
     <button class="btn" style="color:white;background-color: #f7982a;" form-type="submit"> 提交 </button>
   </form>
-  <ad class='ad'unit-id="adunit-3330782628e23e17"></ad>
 </view>

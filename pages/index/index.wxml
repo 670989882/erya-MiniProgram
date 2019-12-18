@@ -13,7 +13,7 @@
       </view>
       <view bindtouchstart='statredRecord' bindtouchend='endedRecord' class='otherItem mirc' style='margin-right:10rpx'>
         <image src='../../icons/voice.png' style='width:50rpx;height:50rpx;'></image>
-        <text>按住说话</text>
+        <text>长按说话</text>
       </view>
     </view>
     <button class="btn" style="color:white;background-color: #f7982a;" form-type="submit"> 查询 </button>

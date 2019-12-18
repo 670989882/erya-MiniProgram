@@ -1,4 +1,5 @@
 // pages/answer/answer.js
+const app = getApp()
 Page({
 
   /**
@@ -52,7 +53,8 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let list = getApp().data.answerslist;
+    app.data.interstitialAd = true;
+    let list = app.data.answerslist;
     this.setData({
       list: list
     })
