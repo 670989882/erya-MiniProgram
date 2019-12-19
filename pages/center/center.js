@@ -32,7 +32,7 @@ Page({
   onLoad: function (options) {
     let that = this;
     this.setData({
-      adShow: wx.getSystemInfoSync().windowHeight > 570 ? true : false
+      adShow: wx.getSystemInfoSync().windowHeight > 600 ? true : false
     });
     this.data.rewardedVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-6b662195440f652e'

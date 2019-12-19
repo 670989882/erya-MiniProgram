@@ -71,11 +71,12 @@
 .mirc{
   background-color: #ffffff;
   /* background-color: #f7982a; */
-  padding-left: 20rpx;
+  padding-left: 10rpx;
   padding-right: 20rpx;
   padding-top: 8rpx;
   padding-bottom: 8rpx;
   border-radius: 20px;
+  border: #ebebeb 1px solid;
 }
 
 .ad{

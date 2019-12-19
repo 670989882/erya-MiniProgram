@@ -1,12 +1,12 @@
 /* pages/answer/answer.wxss */
 
-.view {
+/* .view {
   margin-top: 20rpx;
   height: 93%;
-  width: 95%;
-}
+  width: 96%;
+} */
 
-.list_name_box {
+/* .list_name_box {
   background: #fff;
   border-bottom: 1px solid #efefef;
   display: flex;
@@ -62,18 +62,82 @@
   margin-bottom: 12rpx;
 }
 
+//定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+//定义滑块 内阴影+圆角
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #bebebe;
+}   */
+
 .tips {
   font-size: 34rpx;
   color: #7a7a7a;
 }
 
-/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar {
-  width: 3px;
+swiper {
+  width: 96%;
+  margin: auto;
+  height: 93%;
 }
 
-/*定义滑块 内阴影+圆角*/
-::-webkit-scrollbar-thumb {
+swiper-item {
   border-radius: 10px;
-  background-color: #bebebe;
+  background: #fff;
+}
+
+.answer {
+  width: 95%;
+  height: 88%;
+  margin: 15rpx auto;
+  background: #fff;
+}
+
+.header-question {
+  font-size: 38rpx;
+  margin: 0 auto;
+  width: 94%;
+}
+
+.header-question image {
+  width: 50rpx; 
+  height: 50rpx;
+  transform: translateY(25%);
+  margin-right: 8rpx;
+}
+
+.header-tips {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10rpx;
+  color: rgb(88, 88, 88);
+  font-size: 28rpx;
+}
+
+.hr {
+  margin-top: 10rpx;
+  height: 1px;
+  background: #333;
+}
+
+.answer-item {
+  padding: 8rpx;
+  margin: 20rpx auto;
+  background: #ebebeb;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 10rpx;
+}
+
+.body-question {
+  font-size: 26rpx;
+  margin-bottom: 15rpx;
+}
+
+.body-answer {
+  font-size: 23rpx;
 }

@@ -277,7 +277,7 @@ Page({
       title: '获取通知中',
     });
     this.setData({
-      adShow: wx.getSystemInfoSync().windowHeight > 570 ? true : false
+      adShow: wx.getSystemInfoSync().windowHeight > 600 ? true : false
     });
     let that = this;
     wx.request({

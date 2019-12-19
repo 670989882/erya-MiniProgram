@@ -1,6 +1,6 @@
 <!--pages/answer/answer.wxml-->
 <view class="container">
-  <scroll-view scroll-y class="view">
+  <!-- <scroll-view scroll-y class="view">
     <view class='list' wx:for='{{list}}' wx:key='this' wx:for-item='parentItem' wx:for-index='parentIndex'>
       <view class='list_name_box' catchtap='listTap' data-parentindex='{{parentIndex}}'>
         <text class='list_item_name'>{{parentItem.input}}</text>
@@ -16,6 +16,26 @@
         </view>
       </view>
     </view>
-  </scroll-view>
+  </scroll-view> -->
+  <swiper bindchange="onSwiperchange">
+    <swiper-item wx:for="{{list}}" wx:for-index="idx" wx:key="idx">
+      <view>
+        <view class="header-question">
+          <image src="../../icons/question.png"></image>
+          <text>{{item.input}}</text>
+        </view>
+        <view class="hr"></view>
+      </view>
+      <scroll-view class="answer" scroll-y="true" bindscrolltolower="onreachbottom" data-question="{{item}}" data-index="{{idx}}">
+        <view class="answer-item" wx:for="{{item.answers}}" wx:key="idx">
+          <view class="body-question"> {{item.question}}</view>
+          <view class="body-answer">答案： {{item.answer}}</view>
+        </view>
+      </scroll-view>
+      <view class="header-tips">
+        <view>第{{idx+1}}个/共{{list.length}}个</view>
+      </view>
+    </swiper-item>
+  </swiper>
   <text class="tips" bindtap='problem'>答案不对？点击这里反馈题目。</text>
 </view>
