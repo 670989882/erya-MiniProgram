@@ -19,6 +19,7 @@
   </scroll-view> -->
   <swiper bindchange="onSwiperchange">
     <swiper-item wx:for="{{list}}" wx:for-index="idx" wx:key="idx">
+    <view class="content">
       <view>
         <view class="header-question">
           <image src="../../icons/question.png"></image>
@@ -33,7 +34,9 @@
         </view>
       </scroll-view>
       <view class="header-tips">
-        <view>第{{idx+1}}个/共{{list.length}}个</view>
+      <text>左右滑动查看其他问题</text>
+        <view class="count">第{{idx+1}}个/共{{list.length}}个</view>
+      </view>
       </view>
     </swiper-item>
   </swiper>

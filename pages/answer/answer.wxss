@@ -110,11 +110,13 @@ swiper-item {
 }
 
 .header-tips {
-  display: flex;
-  justify-content: flex-end;
+ width: 100%;
   margin-right: 10rpx;
   color: rgb(88, 88, 88);
   font-size: 28rpx;
+  position: absolute;
+  bottom: 0;
+  left: 0
 }
 
 .hr {
@@ -125,7 +127,7 @@ swiper-item {
 
 .answer-item {
   padding: 8rpx;
-  margin: 20rpx auto;
+  margin: 0 auto 35rpx;
   background: #ebebeb;
   display: flex;
   flex-direction: column;
@@ -140,4 +142,16 @@ swiper-item {
 
 .body-answer {
   font-size: 23rpx;
+}
+.content{
+  width: 100%;
+  height: 100%
+}
+.content{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.count{
+  float: right;
 }

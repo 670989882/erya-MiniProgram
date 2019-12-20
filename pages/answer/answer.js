@@ -8,7 +8,10 @@ Page({
   data: {
     list: [],
     start: 2,
-    size: 10
+    size: 10,
+    currentPage: 0,
+    pageCount: 1,
+    arr: []
   },
   onShareAppMessage: function () {
     return {
@@ -52,6 +55,13 @@ Page({
   //   }
   // }, 
   onreachbottom: function (e) {
+    if (this.data.currentPage >= this.data.pageCount) {
+      wx.showToast({
+        title: '已经到底了！',
+        icon: 'none'
+      })
+      return;
+    }
     let index = e.target.dataset.index;
     let that = this;
     wx.request({
@@ -66,6 +76,9 @@ Page({
       success: function (res) {
         let list = that.data.list
         list[index].answers.push(...res.data.records)//添加到后面
+        that.data.currentPage = res.data.current
+        that.data.pageCount = res.data.pages
+        that.data.arr[index] = res.data.current
         that.setData({
           list: list,
         })
@@ -74,8 +87,19 @@ Page({
     })
   },
   /*解决bug切换swiper时start不从2开始 */
-  onSwiperchange: function () {
-    this.data.start = 2
+  onSwiperchange: function (e) {
+    var currentSwiper = e.detail.current
+    if (this.data.arr[currentSwiper]) {
+      var start = this.data.arr[currentSwiper]
+      console.log(start)
+      this.setData({
+        start: start,
+        currentPage: start
+      })
+    } else {
+      this.data.start = 2
+    }
+
   },
   /**
    * 生命周期函数--监听页面加载
