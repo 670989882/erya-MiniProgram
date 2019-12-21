@@ -94,6 +94,16 @@ Page({
         }
       }
     }
+  },copy(e){
+    wx.setClipboardData({
+      data: e.currentTarget.dataset.item.answer,
+      success: function (res) {
+        wx.showToast({
+          title: '答案已复制！',
+          icon: 'none'
+        })
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面加载

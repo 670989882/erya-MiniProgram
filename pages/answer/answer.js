@@ -8,7 +8,6 @@ Page({
   data: {
     list: [],
     size: 10,
-    pageCount: 1,
     arr: []
   },
   onShareAppMessage: function () {
@@ -54,13 +53,16 @@ Page({
   // }, 
   onreachbottom: function (e) {
     let index = e.target.dataset.index;
-    if (this.data.arr[index] >= this.data.pageCount) {
+    if (this.data.arr[index] > this.data.list[index].pages) {
       wx.showToast({
         title: '已经到底了！',
         icon: 'none'
       })
       return;
-    }
+    };
+    wx.showLoading({
+      title: '正在加载...',
+    })
     let that = this;
     wx.request({
       url: 'https://admin.erya.ychstudy.cn/answer/' + this.data.arr[index] + '/' + this.data.size,
@@ -74,11 +76,13 @@ Page({
       success: function (res) {
         let list = that.data.list
         list[index].answers.push(...res.data.records)//添加到后面
-        that.data.pageCount = res.data.pages
+        that.data.list[index].pages = res.data.pages
         that.data.arr[index]++;
         that.setData({
           list: list,
         })
+      }, complete() {
+        wx.hideLoading();
       }
     })
   },
@@ -112,8 +116,17 @@ Page({
     wx.navigateTo({
       url: '../problem/problem?method=question'
     })
+  },copy(e){
+    wx.setClipboardData({
+      data: e.currentTarget.dataset.item.answer,
+      success: function (res) {
+        wx.showToast({
+          title: '答案已复制！',
+          icon:'none'
+        })
+      }
+    })
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -139,7 +152,39 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    let storage = this.data.list;
+    // let storage = JSON.parse(JSON.stringify(answerslist));
+    storage.reverse();
+    if (storage.length > 30)
+      wx.setStorage({
+        key: 'history',
+        data: storage.slice(0, 30)
+      });
+    else {
+      wx.getStorage({
+        key: 'history',
+        success: function (res) {
+          storage.push(...res.data);
+          if (storage.length < 31){
+            wx.setStorage({
+              key: 'history',
+              data: storage,
+            });
+          }else{
+            wx.setStorage({
+              key: 'history',
+              data: storage.slice(0, 30),
+            });
+          }
+        },
+        fail: function (res) {
+          wx.setStorage({
+            key: 'history',
+            data: storage,
+          })
+        }
+      })
+    }
   },
 
   /**

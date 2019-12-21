@@ -12,7 +12,7 @@
         <image src='../../icons/down.png' class='icon_down {{parentItem.show&&"icon_down_rotate"}}'></image>
         <image src='../../icons/del.png' class='icon_down' catchtap='del' data-parentindex='{{parentIndex}}'></image>
       </view>
-      <view class='list_item' hidden='{{!parentItem.show}}' wx:for='{{parentItem.answers}}' wx:key='this' catchtap='listItemTap' data-index='{{index}}' data-parentindex='{{parentIndex}}'>
+      <view class='list_item' hidden='{{!parentItem.show}}' wx:for='{{parentItem.answers}}' wx:key='this' catchtap='listItemTap' data-index='{{index}}' data-parentindex='{{parentIndex}}' bindlongpress="copy" data-item="{{item}}">
         <view class='list_item_name_box'>
           <text class='list_item_name'>{{item.question}}</text>
           <image src='../../icons/down.png' class='icon_down {{item.show&&"icon_down_rotate"}}'></image>

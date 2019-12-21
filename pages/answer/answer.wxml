@@ -28,7 +28,7 @@
         <view class="hr"></view>
       </view>
       <scroll-view class="answer" scroll-y="true" bindscrolltolower="onreachbottom" data-question="{{item}}" data-index="{{idx}}">
-        <view class="answer-item" wx:for="{{item.answers}}" wx:key="idx">
+        <view class="answer-item" wx:for="{{item.answers}}" wx:key="idx" bindlongpress="copy" data-item="{{item}}">
           <view class="body-question"> {{item.question}}</view>
           <view class="body-answer">答案： {{item.answer}}</view>
         </view>

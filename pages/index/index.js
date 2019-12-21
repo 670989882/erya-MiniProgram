@@ -148,6 +148,7 @@ Page({
           // res[i] = "";
           // for (let j = 0; j < tmp.length; j++)
           //   res[i] += tmp[j];
+          res[i].replace("\u00A0", "");
         }
         let req = true;
         for (let i = 0; i < res.length; i++) {
@@ -182,9 +183,11 @@ Page({
     let that = this;
     wx.requestSubscribeMessage({
       tmplIds: ['XRiWYJ2-pWtjMSA1tVa4Gr1rLN3wKzrEuZY_DOGjBmw'],
-      success(res) { console.log(res) },
-      fail(res) { console.log(res) },
-      complete() {that.bindFormSubmit(res) }
+      success(res) {
+        console.log(res);
+        //todo.....上传服务器
+      },
+      complete() { that.bindFormSubmit(res) }
     });
   }, bindFormSubmit: function (res) { //查询答案
     let that = this;
@@ -206,50 +209,51 @@ Page({
             for (let i = 0; i < res.length; i++) {
               let anss = new Object();
               anss.input = res[i];
-              anss.answers = e.data[i].answers
+              anss.answers = e.data[i].answers;
+              anss.pages = e.data[i].flag ? 2 : 1;
               answerslist[i] = anss
             }
-            let storage = JSON.parse(JSON.stringify(answerslist));;
-            if (answerslist.length > 30)
-              wx.setStorage({
-                key: 'history',
-                data: storage.slice(0, 30)
-              });
-            else {
-              wx.getStorage({
-                key: 'history',
-                success: function (res) {
-                  let quesdata = res.data;
-                  let temp = storage.reverse();
-                  temp.push(...quesdata);
-                  if (quesdata.length < 31)
-                    wx.setStorage({
-                      key: 'history',
-                      data: temp,
-                    });
-                  else
-                    wx.setStorage({
-                      key: 'history',
-                      data: temp.slice(0, 30),
-                    });
-                },
-                fail: function (res) {
-                  wx.setStorage({
-                    key: 'history',
-                    data: storage.reverse(),
-                  })
-                }
-              })
-            }
+            // let storage = JSON.parse(JSON.stringify(answerslist));;
+            // if (answerslist.length > 30)
+            //   wx.setStorage({
+            //     key: 'history',
+            //     data: storage.slice(0, 30)
+            //   });
+            // else {
+            //   wx.getStorage({
+            //     key: 'history',
+            //     success: function (res) {
+            //       let quesdata = res.data;
+            //       let temp = storage.reverse();
+            //       temp.push(...quesdata);
+            //       if (quesdata.length < 31)
+            //         wx.setStorage({
+            //           key: 'history',
+            //           data: temp,
+            //         });
+            //       else
+            //         wx.setStorage({
+            //           key: 'history',
+            //           data: temp.slice(0, 30),
+            //         });
+            //     },
+            //     fail: function (res) {
+            //       wx.setStorage({
+            //         key: 'history',
+            //         data: storage.reverse(),
+            //       })
+            //     }
+            //   })
+            // }
             getApp().data.answerslist = answerslist;
-            wx.navigateTo({
-              url: '../answer/answer',
-            })
+            app.data.num--;
+            app.changeNum();
             that.setData({
               questions: ""
             })
-            app.data.num--;
-            app.changeNum();
+            wx.navigateTo({
+              url: '../answer/answer',
+            })
           } else {
             wx.hideLoading();
             wx.showToast({

@@ -4,15 +4,13 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": false,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
 		"coverView": true,
 		"autoAudits": false,
-		"showShadowRootInWxmlPanel": true,
-		"scopeDataCheck": false,
 		"uglifyFileName": true,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
@@ -21,7 +19,9 @@
 			"ignore": [],
 			"disablePlugins": [],
 			"outputPath": ""
-		}
+		},
+		"showShadowRootInWxmlPanel": true,
+		"scopeDataCheck": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.9.4",
