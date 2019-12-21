@@ -8,14 +8,14 @@
     <view wx-if='{{show}}' class='unhistory'>没有历史记录。</view>
     <view class='list' wx:for='{{list}}' wx:key='this' wx:for-item='parentItem' wx:for-index='parentIndex'>
       <view class='list_name_box' catchtap='listTap' data-parentindex='{{parentIndex}}'>
-        <text class='list_item_name'>{{parentItem.input}}</text>
         <image src='../../icons/down.png' class='icon_down {{parentItem.show&&"icon_down_rotate"}}'></image>
+        <text class='list_item_name'>{{parentItem.input}}</text>
         <image src='../../icons/del.png' class='icon_down' catchtap='del' data-parentindex='{{parentIndex}}'></image>
       </view>
       <view class='list_item' hidden='{{!parentItem.show}}' wx:for='{{parentItem.answers}}' wx:key='this' catchtap='listItemTap' data-index='{{index}}' data-parentindex='{{parentIndex}}' bindlongpress="copy" data-item="{{item}}">
         <view class='list_item_name_box'>
-          <text class='list_item_name'>{{item.question}}</text>
           <image src='../../icons/down.png' class='icon_down {{item.show&&"icon_down_rotate"}}'></image>
+          <text class='list_item_name'>{{item.question}}</text>
         </view>
         <view class='other' hidden='{{!item.show}}'>
           <text class='other_text'>{{item.answer}}</text>

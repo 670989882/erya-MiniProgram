@@ -138,17 +138,17 @@ Page({
         res = this.data.questions;
         res = res.split("\n");
         for (let i = 0; i < res.length; i++) {
-          if (res[i] == "") {
-            res.splice(i, 1);
-            i--;
-            continue;
-          }
           res[i] = res[i].trim();
           // let tmp = res[i].split("\u00A0");
           // res[i] = "";
           // for (let j = 0; j < tmp.length; j++)
           //   res[i] += tmp[j];
           res[i].replace("\u00A0", "");
+          if (res[i] == "") {
+            res.splice(i, 1);
+            i--;
+            continue;
+          }
         }
         let req = true;
         for (let i = 0; i < res.length; i++) {
