@@ -34,3 +34,8 @@
   margin-right: 20rpx;
   vertical-align: -6rpx;
 }
+
+.jifen{
+  display: flex;
+  align-items: center;
+}

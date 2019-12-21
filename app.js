@@ -43,7 +43,7 @@ App({
         }
       }
     })
-    that.data.voice = wx.getStorageSync("voice");
+    this.data.voice = wx.getStorageSync("voice");
   }, changeNum: function () {
     let that = this;
     if (that.data.openid != "") {

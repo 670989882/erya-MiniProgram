@@ -5,7 +5,7 @@
   </view>
   <image class="picture" bindtap="getPicture" src="../../icons/picture.png"></image>
   <form class="form">
-    <textarea class="textarea" fixed="{{true}}" value="{{questions}}" placeholder="请输入题目(多个题目请换行)" name="textarea" maxlength="-1" bindblur="changeQuestions" />
+    <textarea class="textarea" fixed="{{true}}" value="{{questions}}" placeholder="请输入题目(多个题目请换行)" name="textarea" maxlength="-1" bindinput="changeQuestions" />
     <view class='others'>
       <view class='otherItem'>
         <checkbox value="question" color="#f7982a" checked="{{checked}}" bindtap='checkboxChange' />
@@ -16,7 +16,7 @@
         <text>长按说话</text>
       </view>
     </view>
-    <button class="btn" style="color:white;background-color: #f7982a;" form-type="submit" bindtap="bindFormSubmit"> 查询 </button>
+    <button class="btn" style="color:white;background-color: #f7982a;" form-type="submit" bindtap="judge"> 查询 </button>
   </form>
   <text wx:if="{{notice}}" class='notice'>{{notice}}
   </text>

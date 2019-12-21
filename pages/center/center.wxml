@@ -2,9 +2,9 @@
   <view class="headerView">
     <open-data class="picture" type="userAvatarUrl"></open-data>
     <open-data type="userNickName"></open-data>
-    <view>
+    <view class="jifen">
       <text space="ensp">积分:{{num}} </text>
-      <image src='../../icons/refresh.png' style='width:26rpx;height:26rpx' bindtap='refresh'></image>
+      <image src='../../icons/refresh.png' style='width:30rpx;height:30rpx' bindtap='refresh'></image>
     </view>
   </view>
   <view class="my-list">
