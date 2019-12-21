@@ -7,9 +7,7 @@ Page({
    */
   data: {
     list: [],
-    start: 2,
     size: 10,
-    currentPage: 0,
     pageCount: 1,
     arr: []
   },
@@ -55,17 +53,17 @@ Page({
   //   }
   // }, 
   onreachbottom: function (e) {
-    if (this.data.currentPage >= this.data.pageCount) {
+    let index = e.target.dataset.index;
+    if (this.data.arr[index] >= this.data.pageCount) {
       wx.showToast({
         title: '已经到底了！',
         icon: 'none'
       })
       return;
     }
-    let index = e.target.dataset.index;
     let that = this;
     wx.request({
-      url: 'https://admin.erya.ychstudy.cn/answer/' + this.data.start + '/' + this.data.size,
+      url: 'https://admin.erya.ychstudy.cn/answer/' + this.data.arr[index] + '/' + this.data.size,
       method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -76,30 +74,27 @@ Page({
       success: function (res) {
         let list = that.data.list
         list[index].answers.push(...res.data.records)//添加到后面
-        that.data.currentPage = res.data.current
         that.data.pageCount = res.data.pages
-        that.data.arr[index] = res.data.current
+        that.data.arr[index]++;
         that.setData({
           list: list,
         })
-        that.data.start++
       }
     })
   },
   /*解决bug切换swiper时start不从2开始 */
   onSwiperchange: function (e) {
-    var currentSwiper = e.detail.current
-    if (this.data.arr[currentSwiper]) {
-      var start = this.data.arr[currentSwiper]
-      console.log(start)
-      this.setData({
-        start: start,
-        currentPage: start
-      })
-    } else {
-      this.data.start = 2
-    }
-
+    // let currentSwiper = e.detail.current
+    // if (this.data.arr[currentSwiper]) {
+    //   let start = this.data.arr[currentSwiper]
+    //   console.log(start)
+    //   this.setData({
+    //     start: start,
+    //     currentPage: start
+    //   })
+    // } else {
+    //   this.data.start = 2
+    // }
   },
   /**
    * 生命周期函数--监听页面加载
@@ -107,8 +102,10 @@ Page({
   onLoad: function (options) {
     app.data.interstitialAd = true;
     let list = app.data.answerslist;
+    let arr = Array(list.length).fill(2);
     this.setData({
-      list: list
+      list: list,
+      arr: arr
     })
   },
   problem: function () {
@@ -142,8 +139,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    let app=getApp();
-    app.data.interstitialAd = true;
+
   },
 
   /**
