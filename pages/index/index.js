@@ -134,9 +134,19 @@ Page({
     }
   },
   bindFormSubmit: function(res) { //查询答案
+    let flag=true;
+    wx.requestSubscribeMessage({
+      tmplIds: ['XRiWYJ2-pWtjMSA1tVa4Gr1rLN3wKzrEuZY_DOGjBmw'],
+      success(res) { console.log(res)},
+      fail(res){console.log(res)},
+      complete(){flag=false;}
+    });
+    while(flag);
     let that = this;
     if (app.data.num > 0) {
-      res = res.detail.value.textarea;
+      res = this.questions;
+      console.log(res)
+      console.log(this.data.questions)
       if (res != "") {
         app.data.question = res;
         wx.showLoading({
@@ -388,7 +398,6 @@ Page({
         that.requestText(res.tempFilePath);
     })
     recorderManager.onError((e) => {
-      console.log(e)
       if (e.errMsg == "operateRecorder:fail auth deny" || e.errMsg == "operateRecorder:fail authorize no response") {
         that.getAuthorization()
       }
@@ -400,7 +409,16 @@ Page({
       encodeBitRate: 48000,
       format: 'mp3'
     }
-    recorderManager.start(options);
+    if(app.data.vioce==='1'){
+      recorderManager.start(options);
+    }else{
+      app.data.voice='1';
+      wx.setStorage({
+        key: 'voice',
+        data: '1',
+      })
+    }
+
   },
   endedRecord() {
     this.data.recorderManager.stop();

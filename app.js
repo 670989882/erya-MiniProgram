@@ -6,7 +6,8 @@ App({
     num: 0,
     question: "",
     answerslist: [],
-    interstitialAd: false
+    interstitialAd: false,
+    voice:''
   },
   // 监听错误
   onError: function (err) {
