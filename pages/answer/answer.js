@@ -13,8 +13,8 @@ Page({
   },
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   },
   // //点击最外层列表展开收起
@@ -56,20 +56,20 @@ Page({
     let index = e.target.dataset.index;
     if (this.data.arr[index] > this.data.list[index].pages) {
       wx.showToast({
-        title: '已经到底了！',
-        icon: 'none'
+        title: "已经到底了！",
+        icon: "none"
       })
       return;
     };
     wx.showLoading({
-      title: '正在加载...',
+      title: "正在加载...",
     })
     let that = this;
     wx.request({
-      url: that.data.url + this.data.arr[index] + '/' + this.data.size,
-      method: 'POST',
+      url: that.data.url + this.data.arr[index] + "/" + this.data.size,
+      method: "POST",
       header: {
-        'content-type': 'application/x-www-form-urlencoded'
+        "content-type": "application/x-www-form-urlencoded"
       },
       data: {
         search: e.target.dataset.question.input
@@ -109,7 +109,7 @@ Page({
     let list = [];
     if (options.openid) {
       wx.showLoading({
-        title: '加载中...',
+        title: "加载中...",
       });
       this.setData({
         url:"https://admin.erya.ychstudy.cn/answerTemp"
@@ -119,7 +119,7 @@ Page({
         method: "POST",
         data: {
           openid: options.openid,
-          time: options.time
+          // time: options.time
         }, success(res) {
           if (res.statusCode == 200) {
             list=res.data;
@@ -127,15 +127,15 @@ Page({
           } else {
             wx.hideLoading();
             wx.showToast({
-              title: '加载失败',
-              image: '../../icons/error.png'
+              title: "加载失败",
+              image: "../../icons/error.png"
             })
           }
         }, fail(res) {
           wx.hideLoading();
           wx.showToast({
-            title: '加载失败',
-            image: '../../icons/error.png'
+            title: "加载失败",
+            image: "../../icons/error.png"
           })
         }
       })
@@ -150,15 +150,15 @@ Page({
   },
   problem: function () {
     wx.navigateTo({
-      url: '../problem/problem?method=question'
+      url: "../problem/problem?method=question"
     })
   }, copy(e) {
     wx.setClipboardData({
       data: e.currentTarget.dataset.item.answer,
       success: function (res) {
         wx.showToast({
-          title: '答案已复制！',
-          icon: 'none'
+          title: "答案已复制！",
+          icon: "none"
         })
       }
     })
@@ -193,29 +193,29 @@ Page({
     storage.reverse();
     if (storage.length > 30)
       wx.setStorage({
-        key: 'history',
+        key: "history",
         data: storage.slice(0, 30)
       });
     else {
       wx.getStorage({
-        key: 'history',
+        key: "history",
         success: function (res) {
           storage.push(...res.data);
           if (storage.length < 31) {
             wx.setStorage({
-              key: 'history',
+              key: "history",
               data: storage,
             });
           } else {
             wx.setStorage({
-              key: 'history',
+              key: "history",
               data: storage.slice(0, 30),
             });
           }
         },
         fail: function (res) {
           wx.setStorage({
-            key: 'history',
+            key: "history",
             data: storage,
           })
         }
@@ -242,8 +242,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   }
 })

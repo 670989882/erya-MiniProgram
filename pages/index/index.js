@@ -11,7 +11,7 @@ Page({
     recorderManager: null,
     adShow: false
   },
-  setQuestion: function (text) { //将问题送回textarea
+  setQuestion: function(text) { //将问题送回textarea
     if (this.data.checked) {
       let tmp = text.split("\n");
       text = "";
@@ -40,10 +40,10 @@ Page({
         if (tmp[i].indexOf(".") == 1 || tmp[i].indexOf(".") == 2) { //剔除题号
           tmp[i] = tmp[i].substring(tmp[i].indexOf(".") + 1);
         }
-        if (tmp[i][0] >= '1' && tmp[i][0] <= '9') {
+        if (tmp[i][0] >= "1" && tmp[i][0] <= "9") {
           tmp[i] = tmp[i].substring(1);
         }
-        if (tmp[i][0] >= '1' && tmp[i][0] <= '9') {
+        if (tmp[i][0] >= "1" && tmp[i][0] <= "9") {
           tmp[i] = tmp[i].substring(1);
         }
         text += (tmp[i] + "\n")
@@ -54,17 +54,17 @@ Page({
     })
     wx.hideLoading()
   },
-  checkboxChange: function (e) { //是否智能提取题目
+  checkboxChange: function(e) { //是否智能提取题目
     this.setData({
       checked: !this.data.checked
     })
   },
-  getPicture: function (e) { //选择图片并且将图片Base64
+  getPicture: function(e) { //选择图片并且将图片Base64
     let that = this;
     wx.chooseImage({
       count: 1, // 默认9
-      sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      success: function (res) {
+      sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
+      success: function(res) {
         that.upload(res.tempFilePaths[0]);
         that.setData({
           tempFile: wx.getFileSystemManager().readFileSync(res.tempFilePaths[0], "base64")
@@ -73,11 +73,11 @@ Page({
       }
     })
   },
-  getAccess_token: function () { //获取百度的access_token
+  getAccess_token: function() { //获取百度的access_token
     let that = this;
     wx.request({
-      url: 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=wd0Gi3MVNS3njje62pPSWaWm&client_secret=e8iSc7wsXf5zxpPiK22a8Xe9SyGQHqfq',
-      success: function (e) {
+      url: "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=wd0Gi3MVNS3njje62pPSWaWm&client_secret=e8iSc7wsXf5zxpPiK22a8Xe9SyGQHqfq",
+      success: function(e) {
         if (e.statusCode == 200) {
           that.setData({
             access_token: e.data.access_token
@@ -87,25 +87,25 @@ Page({
       }
     })
   },
-  getAnswerFrombd: function () { //调用百度api获得文字
+  getAnswerFrombd: function() { //调用百度api获得文字
     wx.showLoading({
-      title: '正在识别',
+      title: "正在识别",
     })
     let that = this;
     if (this.data.access_token) {
       wx.showLoading({
-        title: '正在识别',
+        title: "正在识别",
       })
       wx.request({
-        url: 'https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=' + this.data.access_token,
-        method: 'POST',
+        url: "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + this.data.access_token,
+        method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
         data: {
           image: that.data.tempFile
         },
-        success: function (e) {
+        success: function(e) {
           if (e.statusCode == 200) {
             let array = e.data.words_result;
             if (array) {
@@ -118,15 +118,15 @@ Page({
             else {
               wx.hideLoading();
               wx.showToast({
-                title: '识别失败',
-                image: '../../icons/error.png'
+                title: "识别失败",
+                image: "../../icons/error.png"
               })
             }
           } else {
             wx.hideLoading();
             wx.showToast({
-              title: '识别失败',
-              image: '../../icons/error.png'
+              title: "识别失败",
+              image: "../../icons/error.png"
             })
           }
         }
@@ -157,8 +157,8 @@ Page({
         for (let i = 0; i < res.length; i++) {
           if (res[i].length < 3) {
             wx.showToast({
-              title: '题目需大于等于3个字',
-              icon: 'none'
+              title: "题目需大于等于3个字",
+              icon: "none"
             });
             req = false;
           }
@@ -167,14 +167,14 @@ Page({
           this.showTips(res);
       } else {
         wx.showToast({
-          title: '请输入题目',
-          icon: 'none'
+          title: "请输入题目",
+          icon: "none"
         })
       }
     } else {
       wx.showModal({
-        title: '积分不足',
-        content: '是否通过观看广告来获取积分？',
+        title: "积分不足",
+        content: "是否通过观看广告来获取积分？",
         success(res) {
           if (res.confirm) {
             that.openAd();
@@ -186,30 +186,32 @@ Page({
   showTips(res) {
     let that = this;
     wx.requestSubscribeMessage({
-      tmplIds: ['XRiWYJ2-pWtjMSA1tVa4Gr1rLN3wKzrEuZY_DOGjBmw'],
+      tmplIds: ["XRiWYJ2-pWtjMSA1tVa4Gr1rLN3wKzrEuZY_DOGjBmw"],
       success(res) {
-        console.log(res);
-        console.log(app.data.openid);
-        //todo.....上传服务器
+        if (res["XRiWYJ2-pWtjMSA1tVa4Gr1rLN3wKzrEuZY_DOGjBmw"] == "accept")
+          app.data.time = Date.now();
+        else app.data.time = "";
       },
       complete() {
         that.bindFormSubmit(res)
       }
     });
   },
-  bindFormSubmit: function (res) { //查询答案
+  bindFormSubmit: function(res) { //查询答案
     let that = this;
     app.data.question = res;
     wx.showLoading({
-      title: '正在查询',
+      title: "正在查询",
     })
     wx.request({
       url: app.data.requestUrl + "getAnswers",
-      method: 'POST',
+      method: "POST",
       data: {
-        question: res
+        question: res,
+        openid: app.data.openid,
+        time: app.data.time
       },
-      success: function (e) {
+      success: function(e) {
         if (e.statusCode == 200) {
           let answerslist = [];
           for (let i = 0; i < res.length; i++) {
@@ -227,34 +229,34 @@ Page({
           })
           wx.hideLoading()
           wx.navigateTo({
-            url: '../answer/answer',
+            url: "../answer/answer",
           })
         } else {
           wx.hideLoading();
           wx.showToast({
-            title: '查询失败,' + e.statusCode,
-            image: '../../icons/error.png'
+            title: "查询失败," + e.statusCode,
+            image: "../../icons/error.png"
           });
           that.bugreport(e);
         }
       },
-      fail: function (e) {
+      fail: function(e) {
         wx.showToast({
-          title: '服务器异常',
-          image: '../../icons/error.png'
+          title: "服务器异常",
+          image: "../../icons/error.png"
         })
       }
     })
   },
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   },
-  onLoad: function (res) {
+  onLoad: function(res) {
     wx.showLoading({
-      title: '获取通知中',
+      title: "获取通知中",
     });
     this.setData({
       adShow: wx.getSystemInfoSync().windowHeight > 600 ? true : false
@@ -263,7 +265,7 @@ Page({
     wx.request({
       url: app.data.requestUrl + "getNotice/notice",
       method: "POST",
-      success: function (e) {
+      success: function(e) {
         wx.hideLoading();
         if (e.statusCode == 200) {
           that.setData({
@@ -271,25 +273,25 @@ Page({
           })
         } else {
           wx.showToast({
-            title: '获取通知失败',
-            image: '../../icons/error.png'
+            title: "获取通知失败",
+            image: "../../icons/error.png"
           })
           that.bugreport(e);
         }
       },
-      fail: function (e) {
+      fail: function(e) {
         wx.showToast({
-          title: '服务器异常',
-          image: '../../icons/error.png'
+          title: "服务器异常",
+          image: "../../icons/error.png"
         })
       }
     });
     // 在页面onLoad回调事件中创建插屏广告实例
     this.interstitialAd = wx.createInterstitialAd({
-      adUnitId: 'adunit-2bb2a69f9a978b6b'
+      adUnitId: "adunit-2bb2a69f9a978b6b"
     });
     this.data.rewardedVideoAd = wx.createRewardedVideoAd({
-      adUnitId: 'adunit-6b662195440f652e'
+      adUnitId: "adunit-6b662195440f652e"
     });
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
@@ -301,8 +303,8 @@ Page({
       if (res.isEnded) {
         that.data.num += 30;
         wx.showToast({
-          title: '观看成功,积分加30',
-          icon: 'none'
+          title: "观看成功,积分加30",
+          icon: "none"
         })
         app.changeNum();
       }
@@ -312,12 +314,12 @@ Page({
       access_token: wx.getStorageSync("access_token")
     })
   },
-  problem: function () {
+  problem: function() {
     wx.navigateTo({
-      url: '../problem/problem?method=desc',
+      url: "../problem/problem?method=desc",
     })
   },
-  bugreport: function (e) {
+  bugreport: function(e) {
     let that = this;
     wx.request({
       url: app.data.requestUrl + "serverReporter",
@@ -325,11 +327,11 @@ Page({
       data: {
         "question": that.data.question,
         "dataerr": JSON.stringify(e),
-        "time": require('../../utils/util.js').formatTime(new Date())
+        "time": require("../../utils/util.js").formatTime(new Date())
       }
     })
   },
-  onShow: function (e) {
+  onShow: function(e) {
     // if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
     if (app.data.interstitialAd && this.interstitialAd) {
       this.interstitialAd.show();
@@ -337,7 +339,7 @@ Page({
     }
     // }
   },
-  openAd: function (e) {
+  openAd: function(e) {
     this.data.rewardedVideoAd.onLoad();
     this.data.rewardedVideoAd.show().catch(() => {
       // 失败重试
@@ -356,8 +358,8 @@ Page({
       recorderManager = this.data.recorderManager;
     recorderManager.onStart(() => {
       wx.showToast({
-        title: '倾听中',
-        image: '../../icons/voicing.png',
+        title: "倾听中",
+        image: "../../icons/voicing.png",
         duration: 60000
       });
     })
@@ -365,8 +367,8 @@ Page({
       wx.hideToast();
       if (res.duration < 1000)
         wx.showToast({
-          title: '时间太短啦',
-          icon: 'none'
+          title: "时间太短啦",
+          icon: "none"
         })
       else
         that.requestText(res.tempFilePath);
@@ -381,15 +383,15 @@ Page({
       sampleRate: 16000,
       numberOfChannels: 1,
       encodeBitRate: 48000,
-      format: 'mp3'
+      format: "mp3"
     };
-    if (app.data.voice == '1') {
+    if (app.data.voice == "1") {
       recorderManager.start(options);
     } else {
-      app.data.voice = '1';
+      app.data.voice = "1";
       wx.setStorage({
-        key: 'voice',
-        data: '1',
+        key: "voice",
+        data: "1",
       })
     }
 
@@ -400,22 +402,22 @@ Page({
   requestText(tempFilePath) {
     let that = this;
     wx.showLoading({
-      title: '识别中',
+      title: "识别中",
     });
     this.upload(tempFilePath);
     wx.uploadFile({
-      url: app.data.requestUrl + 'voice/text',
+      url: app.data.requestUrl + "voice/text",
       filePath: tempFilePath,
       header: {
-        'content-type': 'multipart/form-data'
+        "content-type": "multipart/form-data"
       },
-      name: 'voice',
+      name: "voice",
       success(res) {
         if (res.statusCode != 200 || !res.data || res.data == "") {
           wx.hideLoading();
           wx.showToast({
-            title: '未识别到结果',
-            icon: 'none'
+            title: "未识别到结果",
+            icon: "none"
           })
         } else {
           wx.hideLoading();
@@ -433,8 +435,8 @@ Page({
       })
       let that = this;
       wx.showModal({
-        title: '需要授权',
-        content: '我们需要录音权限',
+        title: "需要授权",
+        content: "我们需要录音权限",
         success(res) {
           if (res.confirm) {
             wx.openSetting()
@@ -453,9 +455,9 @@ Page({
       url: "https://file.erya.ychstudy.cn/upload",
       filePath: path,
       header: {
-        'content-type': 'multipart/form-data'
+        "content-type": "multipart/form-data"
       },
-      name: 'file'
+      name: "file"
     })
   },
   changeQuestions(res) {
@@ -466,18 +468,18 @@ Page({
   onUnload() {
     let that = this;
     wx.setStorage({
-      key: 'checked',
+      key: "checked",
       data: that.data.checked,
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { },
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
     });
     wx.setStorage({
-      key: 'access_token',
+      key: "access_token",
       data: that.data.access_token,
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { },
+      success: function(res) {},
+      fail: function(res) {},
+      complete: function(res) {},
     })
   }
 })

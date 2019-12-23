@@ -17,11 +17,11 @@ Page({
     interstitialAd:null
   }, requestData() {
     wx.showLoading({
-      title: '加载中',
+      title: "加载中",
     })
     let that = this;
     wx.request({
-      url: app.data.requestUrl + 'course/1/' + that.data.pageSize,
+      url: app.data.requestUrl + "course/1/" + that.data.pageSize,
       method: "POST",
       header: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -53,8 +53,8 @@ Page({
   }, loadMoreData() {
     if (this.data.pageNo === this.data.pageTotal) {
       wx.showToast({
-        title: '没有更多数据了',
-        icon: 'none'
+        title: "没有更多数据了",
+        icon: "none"
       })
     } else {
       if (this.data.hideLoading) {
@@ -64,7 +64,7 @@ Page({
         let that = this;
         let pageNo = (that.data.pageNo + 1);
         wx.request({
-          url: app.data.requestUrl + 'course/' + pageNo + '/' + that.data.pageSize,
+          url: app.data.requestUrl + "course/" + pageNo + "/" + that.data.pageSize,
           method: "POST",
           header: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -89,8 +89,8 @@ Page({
     let that=this;
     if (app.data.num < 1) {
       wx.showModal({
-        title: '积分不足',
-        content: '是否通过观看广告来获取积分？',
+        title: "积分不足",
+        content: "是否通过观看广告来获取积分？",
         success(res) {
           if (res.confirm) {
             that.openAd();
@@ -101,7 +101,7 @@ Page({
        app.data.num--;
        app.changeNum();
       wx.navigateTo({
-        url: '../detail/detail?id=' + res.currentTarget.dataset.id,
+        url: "../detail/detail?id=" + res.currentTarget.dataset.id,
       })
     }
   }, openAd: function (e) {
@@ -118,10 +118,10 @@ Page({
   onLoad: function (options) {
     this.requestData();
     this.interstitialAd = wx.createInterstitialAd({
-      adUnitId: 'adunit-2bb2a69f9a978b6b'
+      adUnitId: "adunit-2bb2a69f9a978b6b"
     });
     this.data.rewardedVideoAd = wx.createRewardedVideoAd({
-      adUnitId: 'adunit-6b662195440f652e'
+      adUnitId: "adunit-6b662195440f652e"
     });
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
@@ -133,8 +133,8 @@ Page({
       if (res.isEnded) {
         app.data.num += 30;
         wx.showToast({
-          title: '观看成功,积分+30',
-          icon: 'none'
+          title: "观看成功,积分+30",
+          icon: "none"
         })
         app.changeNum();
       }
@@ -192,8 +192,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   }
 })

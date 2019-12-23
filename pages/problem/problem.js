@@ -12,20 +12,20 @@ Page({
   bindFormSubmit: function (res) {
     if (res.detail.value.textarea) {
       wx.showLoading({
-        title: '正在反馈',
+        title: "正在反馈",
       })
       wx.request({
         url: app.data.requestUrl + "problem",
         method: "POST",
         data: {
-          time: require('../../utils/util.js').formatTime(new Date()),
+          time: require("../../utils/util.js").formatTime(new Date()),
           problem: res.detail.value.textarea
         },
         success: function (e) {
           wx.hideLoading()
           wx.showToast({
-            title: '反馈成功',
-            icon: 'success'
+            title: "反馈成功",
+            icon: "success"
           })
           setTimeout(function () {
             wx.navigateBack();
@@ -36,8 +36,8 @@ Page({
   },
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   },
   /**
@@ -98,8 +98,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   }
 })

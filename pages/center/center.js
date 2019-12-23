@@ -12,15 +12,15 @@ Page({
   },
   connection: function () {
     wx.showModal({
-      title: '我们一起关联吧！',
-      content: '你的微信公众号需要与网课答案查询关联在一起吗 ？\r\n关联步骤：\r\n1.登陆微信公众号\r\n2.小程序管理 - 添加\r\n3.关联小程序\r\n4.输入网课答案查询的App ID: wx155ae9b028f9ea16\r\n5.提交关联申请\r\n我收到申请后会尽快确认通过的！',
-      confirmText: '复制ID',
-      cancelText: '取消',
+      title: "我们一起关联吧！",
+      content: "你的微信公众号需要与网课答案查询关联在一起吗 ？\r\n关联步骤：\r\n1.登陆微信公众号\r\n2.小程序管理 - 添加\r\n3.关联小程序\r\n4.输入网课答案查询的App ID: wx155ae9b028f9ea16\r\n5.提交关联申请\r\n我收到申请后会尽快确认通过的！",
+      confirmText: "复制ID",
+      cancelText: "取消",
       success: function (res) {
         if (res.confirm) {
-          data: 'wx155ae9b028f9ea16',
+          data: "wx155ae9b028f9ea16",
             wx.showToast({
-              title: '复制成功！',
+              title: "复制成功！",
             })
         }
       }
@@ -35,7 +35,7 @@ Page({
       adShow: wx.getSystemInfoSync().windowHeight > 600 ? true : false
     });
     this.data.rewardedVideoAd = wx.createRewardedVideoAd({
-      adUnitId: 'adunit-6b662195440f652e'
+      adUnitId: "adunit-6b662195440f652e"
     });
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
@@ -50,8 +50,8 @@ Page({
       if (res.isEnded) {
         app.data.num += 30;
         wx.showToast({
-          title: '观看成功,积分加30',
-          icon: 'none'
+          title: "观看成功,积分加30",
+          icon: "none"
         })
         that.setData({
           num: app.data.num
@@ -69,7 +69,7 @@ Page({
     })
   }, refresh: function (e) {
     wx.showLoading({
-      title: '获取中',
+      title: "获取中",
     })
     let that = this;
     wx.login({
@@ -77,7 +77,7 @@ Page({
         if (res.code) {
           //发起网络请求
           wx.request({
-            method: 'post',
+            method: "post",
             url: app.data.requestUrl + "user/login/" + res.code,
             data: {
               code: res.code
@@ -96,8 +96,8 @@ Page({
       }, fail(res) {
         wx.hideLoading();
         wx.showToast({
-          title: '获取失败',
-          image: '../../icons/error.png'
+          title: "获取失败",
+          image: "../../icons/error.png"
         })
       }
     })
@@ -151,8 +151,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   }
 })

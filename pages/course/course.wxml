@@ -1,13 +1,13 @@
 <!--pages/course/course.wxml-->
-<view class='container'>
+<view class="container">
   <view class="form">
-    <input class='input' placeholder="请输入课程名" bindinput="searchChanged" />
-    <view class='btn' bindtap='requestData'>搜索</view>
+    <input class="input" placeholder="请输入课程名" bindinput="searchChanged" />
+    <view class="btn" bindtap="requestData">搜索</view>
   </view>
   <scroll-view scroll-y class="courses" bindscrolltolower="loadMoreData">
-    <view hidden='{{hidden}}' class='none'>没有找到哦</view>
+    <view hidden="{{hidden}}" class="none">没有找到哦</view>
     <view wx:for="{{courses}}" wx:key="id" >
-      <view class="item" data-id="{{item.id}}" bindtap='getDetail'>{{item.name}}</view>
+      <view class="item" data-id="{{item.id}}" bindtap="getDetail">{{item.name}}</view>
       <ad unit-id="adunit-3330782628e23e17" wx:if="{{index%10==0}}" class="ad"></ad>
     </view>
   </scroll-view>

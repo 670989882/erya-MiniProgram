@@ -7,8 +7,8 @@ Page({
    */
   data: {
     id: 0,
-    content: '',
-    name: ''
+    content: "",
+    name: ""
   },
 
   /**
@@ -18,10 +18,10 @@ Page({
     app.data.interstitialAd=true;
     let that = this;
     wx.showLoading({
-      title: '加载中',
+      title: "加载中",
     })
     wx.request({
-      url: app.data.requestUrl + 'course/getCourse/' + options.id,
+      url: app.data.requestUrl + "course/getCourse/" + options.id,
       method: "POST",
       header: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -89,8 +89,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   }
 })

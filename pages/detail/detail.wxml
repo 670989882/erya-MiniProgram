@@ -1,4 +1,4 @@
 <!--pages/detail/detail.wxml-->
 <view class="container">
-<rich-text nodes="{{content}}" class='rich'></rich-text>
+<rich-text nodes="{{content}}" class="rich"></rich-text>
 </view>

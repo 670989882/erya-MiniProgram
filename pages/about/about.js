@@ -10,10 +10,10 @@ Page({
   },
   copy: function () {
     wx.setClipboardData({
-      data: '527812077',
+      data: "527812077",
       success: function (res) {
         wx.showToast({
-          title: '复制成功！',
+          title: "复制成功！",
         })
       }
     })
@@ -21,14 +21,14 @@ Page({
   /*saveing: function (res) {
     if (res.currentTarget.id == 1) {
       wx.downloadFile({
-        url: 'https://ychstudy.cn/erya/redwallet.jpg',
+        url: "https://ychstudy.cn/erya/redwallet.jpg",
         success: function (res) {
           wx.saveImageToPhotosAlbum({
             filePath: res.tempFilePath,
             fail:function(res){
               wx.showModal({
-                title: '授权',
-                content: '需要授权，请点击授权按钮',
+                title: "授权",
+                content: "需要授权，请点击授权按钮",
                 showCancel: false
               })
             }
@@ -37,14 +37,14 @@ Page({
       })
     } else {
       wx.downloadFile({
-        url: 'https://ychstudy.cn/erya/money.jpg',
+        url: "https://ychstudy.cn/erya/money.jpg",
         success: function (res) {
           wx.saveImageToPhotosAlbum({
             filePath: res.tempFilePath,
             fail: function (res) {
               wx.showModal({
-                title: '授权',
-                content: '需要授权，请点击授权按钮',
+                title: "授权",
+                content: "需要授权，请点击授权按钮",
                 showCancel: false
               })
             }
@@ -67,7 +67,7 @@ Page({
     let that = this;
     wx.request({
       url: app.data.requestUrl + "getNotice/ad",
-      method: 'POST',
+      method: "POST",
       success: function (e) {
         if (e.statusCode == 200) {
           that.setData({
@@ -125,8 +125,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   }
 })

@@ -1,13 +1,14 @@
 App({
   data: {
-    requestUrl: 'https://erya.ychstudy.cn/',
-    // requestUrl:'http://localhost:8080/',
+    requestUrl: "https://erya.ychstudy.cn/",
+    // requestUrl:"http://localhost:8080/",
     openid: "",
     num: 0,
     question: "",
     answerslist: [],
     interstitialAd: false,
-    voice:''
+    voice:"",
+    time:""
   },
   // 监听错误
   onError: function (err) {
@@ -20,7 +21,7 @@ App({
       data: {
         "question": that.data.question,
         "error": JSON.stringify(err),
-        "time": require('utils/util.js').formatTime(new Date()),
+        "time": require("utils/util.js").formatTime(new Date()),
         "devInfo": info.model + "|" + info.system + "|" + info.version + "|" + info.SDKVersion
       }
     })
@@ -31,7 +32,7 @@ App({
         if (res.code) {
           //发起网络请求
           wx.request({
-            method: 'post',
+            method: "post",
             url: that.data.requestUrl + "user/login/" + res.code,
             data: {
               code: res.code

@@ -11,12 +11,12 @@ Page({
   del: function (e) {
     let that = this
     wx.showModal({
-      title: '确认删除',
-      content: '确定要删除此条记录吗？',
+      title: "确认删除",
+      content: "确定要删除此条记录吗？",
       success: function (res) {
         if (res.confirm) {
           wx.showLoading({
-            title: '正在删除...',
+            title: "正在删除...",
           })
           var index = e.currentTarget.dataset.parentindex;
           that.data.list.splice(index, 1);
@@ -26,7 +26,7 @@ Page({
             list
           })
           wx.showToast({
-            title: '删除成功！'
+            title: "删除成功！"
           })
           if (list.length == 0)
             that.setData({
@@ -39,17 +39,17 @@ Page({
   delall: function () {
     var that = this
     wx.showModal({
-      title: '全部删除',
-      content: '确定要删除全部记录吗？',
+      title: "全部删除",
+      content: "确定要删除全部记录吗？",
       success: function (res) {
         if (res.confirm) {
           wx.showLoading({
-            title: '正在删除...',
+            title: "正在删除...",
           })
           wx.clearStorageSync();
           wx.hideLoading()
           wx.showToast({
-            title: '删除成功！'
+            title: "删除成功！"
           })
           that.setData({
             list: [],
@@ -99,8 +99,8 @@ Page({
       data: e.currentTarget.dataset.item.answer,
       success: function (res) {
         wx.showToast({
-          title: '答案已复制！',
-          icon: 'none'
+          title: "答案已复制！",
+          icon: "none"
         })
       }
     })
@@ -110,7 +110,7 @@ Page({
    */
   onLoad: function (options) {
     wx.showLoading({
-      title: '加载中',
+      title: "加载中",
     })
     var list = wx.getStorageSync("history");
     if (list.length != 0) {
@@ -169,8 +169,8 @@ Page({
    */
   onShareAppMessage: function () {
     return {
-      title: '网课答案查询',
-      path: 'pages/index/index'
+      title: "网课答案查询",
+      path: "pages/index/index"
     }
   }
 })
