@@ -66,7 +66,7 @@ Page({
     })
     let that = this;
     wx.request({
-      url: that.data.url + this.data.arr[index] + "/" + this.data.size,
+      url: this.data.url + this.data.arr[index] + "/" + this.data.size,
       method: "POST",
       header: {
         "content-type": "application/x-www-form-urlencoded"
@@ -107,27 +107,39 @@ Page({
   onLoad: function (options) {
     app.data.interstitialAd = true;
     let list = [];
-    if (options.openid) {
+    if (options.question) {
       wx.showLoading({
         title: "加载中...",
       });
       this.setData({
-        url:"https://admin.erya.ychstudy.cn/answerTemp"
-      })
+        url: "https://admin.erya.ychstudy.cn/answerTemp/"
+      });
+      let that = this;
       wx.request({
-        url: app.data.requestUrl + "getResult",
+        // url: app.data.requestUrl + "getResult",
+        url: this.data.url + "1/" + this.data.size,
         method: "POST",
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
         data: {
-          openid: options.openid,
+          // openid: options.openid,
           // time: options.time
+          search: options.question
         }, success(res) {
           if (res.statusCode == 200) {
-            list=res.data;
+            let list = Array(new Object());
+            list[0]["answers"] = res.data.records;
+            list[0]["input"] = options.question;
+            list[0]["pages"] = res.data.pages;
+            that.setData({
+              list: list
+            })
             wx.hideLoading();
           } else {
             wx.hideLoading();
             wx.showToast({
-              title: "加载失败",
+              title: "加载失败2",
               image: "../../icons/error.png"
             })
           }
@@ -137,16 +149,21 @@ Page({
             title: "加载失败",
             image: "../../icons/error.png"
           })
+        }, complete() {
+          let arr = Array(1).fill(2);
+          that.setData({
+            arr: arr
+          })
         }
       })
     } else {
       list = app.data.answerslist;
+      let arr = Array(list.length).fill(2);
+      this.setData({
+        list: list,
+        arr: arr
+      })
     }
-    let arr = Array(list.length).fill(2);
-    this.setData({
-      list: list,
-      arr: arr
-    })
   },
   problem: function () {
     wx.navigateTo({
