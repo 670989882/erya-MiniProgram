@@ -56,7 +56,7 @@ Page({
   },
   checkboxChange: function (e) { //是否智能提取题目
     this.setData({
-      checked: !this.data.checkedw
+      checked: !this.data.checked
     })
   },
   getPicture: function (e) { //选择图片并且将图片Base64
@@ -65,9 +65,6 @@ Page({
       count: 1, // 默认9
       sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
       success: function (res) {
-        wx.showLoading({
-          title: '正在识别',
-        })
         that.upload(res.tempFilePaths[0]);
         that.setData({
           tempFile: wx.getFileSystemManager().readFileSync(res.tempFilePaths[0], "base64")
@@ -91,8 +88,14 @@ Page({
     })
   },
   getAnswerFrombd: function () { //调用百度api获得文字
+    wx.showLoading({
+      title: '正在识别',
+    })
     let that = this;
     if (this.data.access_token) {
+      wx.showLoading({
+        title: '正在识别',
+      })
       wx.request({
         url: 'https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=' + this.data.access_token,
         method: 'POST',
@@ -100,11 +103,10 @@ Page({
           "Content-Type": "application/x-www-form-urlencoded"
         },
         data: {
-          image: this.data.tempFile
+          image: that.data.tempFile
         },
         success: function (e) {
           if (e.statusCode == 200) {
-            wx.hideLoading();
             let array = e.data.words_result;
             if (array) {
               let text = "";
@@ -132,7 +134,8 @@ Page({
     } else {
       this.getAccess_token();
     }
-  }, judge() {
+  },
+  judge() {
     if (app.data.num > 0) {
       if (this.data.questions != "") {
         res = this.data.questions;
@@ -179,17 +182,22 @@ Page({
         }
       })
     }
-  }, showTips(res) {
+  },
+  showTips(res) {
     let that = this;
     wx.requestSubscribeMessage({
       tmplIds: ['XRiWYJ2-pWtjMSA1tVa4Gr1rLN3wKzrEuZY_DOGjBmw'],
       success(res) {
         console.log(res);
+        console.log(app.data.openid);
         //todo.....上传服务器
       },
-      complete() { that.bindFormSubmit(res) }
+      complete() {
+        that.bindFormSubmit(res)
+      }
     });
-  }, bindFormSubmit: function (res) { //查询答案
+  },
+  bindFormSubmit: function (res) { //查询答案
     let that = this;
     app.data.question = res;
     wx.showLoading({
@@ -203,65 +211,24 @@ Page({
       },
       success: function (e) {
         if (e.statusCode == 200) {
-          if (Array.isArray(e.data) == true) {
-            wx.hideLoading()
-            let answerslist = [];
-            for (let i = 0; i < res.length; i++) {
-              let anss = new Object();
-              anss.input = res[i];
-              anss.answers = e.data[i].answers;
-              anss.pages = e.data[i].flag ? 2 : 1;
-              answerslist[i] = anss
-            }
-            // let storage = JSON.parse(JSON.stringify(answerslist));;
-            // if (answerslist.length > 30)
-            //   wx.setStorage({
-            //     key: 'history',
-            //     data: storage.slice(0, 30)
-            //   });
-            // else {
-            //   wx.getStorage({
-            //     key: 'history',
-            //     success: function (res) {
-            //       let quesdata = res.data;
-            //       let temp = storage.reverse();
-            //       temp.push(...quesdata);
-            //       if (quesdata.length < 31)
-            //         wx.setStorage({
-            //           key: 'history',
-            //           data: temp,
-            //         });
-            //       else
-            //         wx.setStorage({
-            //           key: 'history',
-            //           data: temp.slice(0, 30),
-            //         });
-            //     },
-            //     fail: function (res) {
-            //       wx.setStorage({
-            //         key: 'history',
-            //         data: storage.reverse(),
-            //       })
-            //     }
-            //   })
-            // }
-            getApp().data.answerslist = answerslist;
-            app.data.num--;
-            app.changeNum();
-            that.setData({
-              questions: ""
-            })
-            wx.navigateTo({
-              url: '../answer/answer',
-            })
-          } else {
-            wx.hideLoading();
-            wx.showToast({
-              title: '查询失败',
-              image: '../../icons/error.png'
-            })
-            that.bugreport(e);
+          let answerslist = [];
+          for (let i = 0; i < res.length; i++) {
+            let anss = new Object();
+            anss.input = res[i];
+            anss.answers = e.data[i].answers;
+            anss.pages = e.data[i].flag ? 2 : 1;
+            answerslist[i] = anss
           }
+          getApp().data.answerslist = answerslist;
+          app.data.num--;
+          app.changeNum();
+          that.setData({
+            questions: ""
+          })
+          wx.hideLoading()
+          wx.navigateTo({
+            url: '../answer/answer',
+          })
         } else {
           wx.hideLoading();
           wx.showToast({
@@ -340,6 +307,10 @@ Page({
         app.changeNum();
       }
     });
+    this.setData({
+      checked: wx.getStorageSync("checked") == "" ? true : checked,
+      access_token: wx.getStorageSync("access_token")
+    })
   },
   problem: function () {
     wx.navigateTo({
@@ -490,6 +461,23 @@ Page({
   changeQuestions(res) {
     this.setData({
       questions: res.detail.value
+    })
+  },
+  onUnload() {
+    let that = this;
+    wx.setStorage({
+      key: 'checked',
+      data: that.data.checked,
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    });
+    wx.setStorage({
+      key: 'access_token',
+      data: that.data.access_token,
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
     })
   }
 })

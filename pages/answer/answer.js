@@ -8,7 +8,8 @@ Page({
   data: {
     list: [],
     size: 10,
-    arr: []
+    arr: [],
+    url: "https://admin.erya.ychstudy.cn/answer/"
   },
   onShareAppMessage: function () {
     return {
@@ -65,7 +66,7 @@ Page({
     })
     let that = this;
     wx.request({
-      url: 'https://admin.erya.ychstudy.cn/answer/' + this.data.arr[index] + '/' + this.data.size,
+      url: that.data.url + this.data.arr[index] + '/' + this.data.size,
       method: 'POST',
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -105,7 +106,42 @@ Page({
    */
   onLoad: function (options) {
     app.data.interstitialAd = true;
-    let list = app.data.answerslist;
+    let list = [];
+    if (options.openid) {
+      wx.showLoading({
+        title: '加载中...',
+      });
+      this.setData({
+        url:"https://admin.erya.ychstudy.cn/answerTemp"
+      })
+      wx.request({
+        url: app.data.requestUrl + "getResult",
+        method: "POST",
+        data: {
+          openid: options.openid,
+          time: options.time
+        }, success(res) {
+          if (res.statusCode == 200) {
+            list=res.data;
+            wx.hideLoading();
+          } else {
+            wx.hideLoading();
+            wx.showToast({
+              title: '加载失败',
+              image: '../../icons/error.png'
+            })
+          }
+        }, fail(res) {
+          wx.hideLoading();
+          wx.showToast({
+            title: '加载失败',
+            image: '../../icons/error.png'
+          })
+        }
+      })
+    } else {
+      list = app.data.answerslist;
+    }
     let arr = Array(list.length).fill(2);
     this.setData({
       list: list,
@@ -116,13 +152,13 @@ Page({
     wx.navigateTo({
       url: '../problem/problem?method=question'
     })
-  },copy(e){
+  }, copy(e) {
     wx.setClipboardData({
       data: e.currentTarget.dataset.item.answer,
       success: function (res) {
         wx.showToast({
           title: '答案已复制！',
-          icon:'none'
+          icon: 'none'
         })
       }
     })
@@ -165,12 +201,12 @@ Page({
         key: 'history',
         success: function (res) {
           storage.push(...res.data);
-          if (storage.length < 31){
+          if (storage.length < 31) {
             wx.setStorage({
               key: 'history',
               data: storage,
             });
-          }else{
+          } else {
             wx.setStorage({
               key: 'history',
               data: storage.slice(0, 30),
