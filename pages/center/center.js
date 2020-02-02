@@ -1,5 +1,7 @@
 // pages/center/center.js
-const app = getApp();
+const request=require("../../utils/request.js");
+const api=require("../../utils/api.js");
+
 Page({
 
   /**
@@ -39,24 +41,34 @@ Page({
     });
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
-        app.data.num++;
-        app.setData({
-          num: app.data.num
+        // app.data.num++;
+        // app.setData({
+        //   num: app.data.num
+        // });
+        // app.changeNum();
+        that.setData({
+          num:that.data.num+1
         });
-        app.changeNum();
+        api.setNum(api.data.num);
+        api.changeNum();
       }
     });
     this.data.rewardedVideoAd.onClose((res) => {
       if (res.isEnded) {
-        app.data.num += 30;
+        // app.data.num += 30;
         wx.showToast({
           title: "观看成功,积分加30",
           icon: "none"
         })
+        // that.setData({
+        //   num: app.data.num
+        // })
+        // app.changeNum();
         that.setData({
-          num: app.data.num
-        })
-        app.changeNum();
+          num: that.data.num + 30
+        });
+        api.setNum(api.data.num);
+        api.changeNum();
       }
     });
   },
@@ -67,40 +79,53 @@ Page({
       this.data.rewardedVideoAd.load()
         .then(() => this.data.rewardedVideoAd.show())
     })
-  }, refresh: function (e) {
+  },refresh: function (e) {
+    // wx.showLoading({
+    //   title: "获取中",
+    // })
+    // let that = this;
+    // let res= request.postData("/user/user/refresh/"+api.getOpenid());
+    // console.log(res);
+    this.getNewData();
+    // wx.login({
+    //   success(res) {
+    //     if (res.code) {
+    //       //发起网络请求
+    //       wx.request({
+    //         method: "post",
+    //         url: app.data.requestUrl + "user/login/" + res.code,
+    //         data: {
+    //           code: res.code
+    //         }, success: function (res) {
+    //           if (res.statusCode == 200) {
+    //             app.data.openid = res.data.openid;
+    //             app.data.num = res.data.num;
+    //             that.setData({
+    //               num: res.data.num
+    //             });
+    //           }
+    //           wx.hideLoading();
+    //         }
+    //       })
+    //     }
+    //   }, fail(res) {
+    //     wx.hideLoading();
+    //     wx.showToast({
+    //       title: "获取失败",
+    //       image: "../../icons/error.png"
+    //     })
+    //   }
+    // })
+  },async getNewData(){
     wx.showLoading({
       title: "获取中",
     })
-    let that = this;
-    wx.login({
-      success(res) {
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            method: "post",
-            url: app.data.requestUrl + "user/login/" + res.code,
-            data: {
-              code: res.code
-            }, success: function (res) {
-              if (res.statusCode == 200) {
-                app.data.openid = res.data.openid;
-                app.data.num = res.data.num;
-                that.setData({
-                  num: res.data.num
-                });
-              }
-              wx.hideLoading();
-            }
-          })
-        }
-      }, fail(res) {
-        wx.hideLoading();
-        wx.showToast({
-          title: "获取失败",
-          image: "../../icons/error.png"
-        })
-      }
+    let res =await request.postData("/user/user/refresh/" + api.getOpenid());
+    this.setData({
+      num:res.data.num
     })
+    api.setNum(res.data.num);
+    wx.hideLoading();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -114,7 +139,7 @@ Page({
    */
   onShow: function () {
     this.setData({
-      num: app.data.num
+      num: api.getNum()
     })
   },
 

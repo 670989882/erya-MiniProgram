@@ -12,7 +12,4 @@
     </view>
   </scroll-view>
   <view class="tips">答案来源于网络，如有侵权，请联系我们。</view>
-  <loading hidden="{{hideLoading}}">
-    加载中...
-  </loading>
 </view>

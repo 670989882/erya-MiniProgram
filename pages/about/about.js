@@ -1,5 +1,6 @@
 // pages/about/about.js
-const app = getApp();
+const request = require("../../utils/request.js");
+
 Page({
 
   /**
@@ -64,20 +65,26 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let that = this;
-    wx.request({
-      url: app.data.requestUrl + "getNotice/ad",
-      method: "POST",
-      success: function (e) {
-        if (e.statusCode == 200) {
-          that.setData({
-            about: e.data
-          })
-        }
-      }
-    })
+    // let that = this;
+    // wx.request({
+    //   url: app.data.requestUrl + "getNotice/ad",
+    //   method: "POST",
+    //   success: function (e) {
+    //     if (e.statusCode == 200) {
+    //       that.setData({
+    //         about: e.data
+    //       })
+    //     }
+    //   }
+    // })
+    this.init();
   },
-
+  async init() {
+    let res = await request.postData("/user/notice/getNotice/ad");
+    this.setData({
+      about: res
+    });
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

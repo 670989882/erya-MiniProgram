@@ -1,5 +1,7 @@
 // pages/detail/detail.js
-const app = getApp()
+const app = getApp();
+const request=require("../../utils/request.js")
+
 Page({
 
   /**
@@ -16,31 +18,42 @@ Page({
    */
   onLoad: function (options) {
     app.data.interstitialAd=true;
-    let that = this;
+    // let that = this;
+    // wx.showLoading({
+    //   title: "加载中",
+    // })
+    // wx.request({
+    //   url: app.data.requestUrl + "course/getCourse/" + options.id,
+    //   method: "POST",
+    //   header: {
+    //     "Content-Type": "application/x-www-form-urlencoded"
+    //   },
+    //   success(res) {
+    //     that.setData({
+    //       id: options.id,
+    //       name: res.data.name,
+    //       content: res.data.content
+    //     })
+    //     wx.setNavigationBarTitle({
+    //       title: that.data.name //页面标题为路由参数
+    //     });
+    //   }, complete() {
+    //     wx.hideLoading()
+    //   }
+    // })
+    this.init(options.id);
+  },async init(id){
     wx.showLoading({
       title: "加载中",
+    });
+    let res=await request.postData("/user/course/getCourse/"+id);
+    this.setData({
+      id: id,
+      name: res.data.name,
+      content: res.data.content
     })
-    wx.request({
-      url: app.data.requestUrl + "course/getCourse/" + options.id,
-      method: "POST",
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      success(res) {
-        that.setData({
-          id: options.id,
-          name: res.data.name,
-          content: res.data.content
-        })
-        wx.setNavigationBarTitle({
-          title: that.data.name //页面标题为路由参数
-        });
-      }, complete() {
-        wx.hideLoading()
-      }
-    })
+    wx.hideLoading();
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

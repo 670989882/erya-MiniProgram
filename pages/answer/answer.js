@@ -1,5 +1,7 @@
 // pages/answer/answer.js
-const app = getApp()
+const app = getApp();
+const request = require("../../utils/request.js");
+
 Page({
 
   /**
@@ -7,9 +9,9 @@ Page({
    */
   data: {
     list: [],
-    size: 10,
-    arr: [],
-    url: "https://admin.erya.ychstudy.cn/answer/"
+    pageSize: 10,
+    origin: "search"
+    // arr: [],
   },
   onShareAppMessage: function () {
     return {
@@ -54,38 +56,39 @@ Page({
   // }, 
   onreachbottom: function (e) {
     let index = e.target.dataset.index;
-    if (this.data.arr[index] > this.data.list[index].pages) {
+    if (this.data.list[index].currentPage >= this.data.list[index].pageCount) {
       wx.showToast({
         title: "已经到底了！",
         icon: "none"
       })
       return;
     };
-    wx.showLoading({
-      title: "正在加载...",
-    })
-    let that = this;
-    wx.request({
-      url: this.data.url + this.data.arr[index] + "/" + this.data.size,
-      method: "POST",
-      header: {
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      data: {
-        search: e.target.dataset.question.input
-      },
-      success: function (res) {
-        let list = that.data.list
-        list[index].answers.push(...res.data.records)//添加到后面
-        that.data.list[index].pages = res.data.pages
-        that.data.arr[index]++;
-        that.setData({
-          list: list,
-        })
-      }, complete() {
-        wx.hideLoading();
-      }
-    })
+    this.loadData(index);
+    // wx.showLoading({
+    //   title: "正在加载...",
+    // })
+    // let that = this;
+    // wx.request({
+    //   url: this.data.url + this.data.arr[index] + "/" + this.data.size,
+    //   method: "POST",
+    //   header: {
+    //     "content-type": "application/x-www-form-urlencoded"
+    //   },
+    //   data: {
+    //     search: e.target.dataset.question.input
+    //   },
+    //   success: function (res) {
+    //     let list = that.data.list
+    //     list[index].answers.push(...res.data.records)//添加到后面
+    //     that.data.list[index].pages = res.data.pages
+    //     that.data.arr[index]++;
+    //     that.setData({
+    //       list: list,
+    //     })
+    //   }, complete() {
+    //     wx.hideLoading();
+    //   }
+    // })
   },
   /*解决bug切换swiper时start不从2开始 */
   onSwiperchange: function (e) {
@@ -107,61 +110,16 @@ Page({
   onLoad: function (options) {
     app.data.interstitialAd = true;
     let list = [];
-    if (options.question) {
-      wx.showLoading({
-        title: "加载中...",
-      });
+    if (options.openid && options.time) {
       this.setData({
-        url: "https://admin.erya.ychstudy.cn/answerTemp/"
+        origin: "notify"
       });
-      let that = this;
-      wx.request({
-        // url: app.data.requestUrl + "getResult",
-        url: this.data.url + "1/" + this.data.size,
-        method: "POST",
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        data: {
-          // openid: options.openid,
-          // time: options.time
-          search: options.question
-        }, success(res) {
-          if (res.statusCode == 200) {
-            let list = Array(new Object());
-            list[0]["answers"] = res.data.records;
-            list[0]["input"] = options.question;
-            list[0]["pages"] = res.data.pages;
-            that.setData({
-              list: list
-            })
-            wx.hideLoading();
-          } else {
-            wx.hideLoading();
-            wx.showToast({
-              title: "加载失败2",
-              image: "../../icons/error.png"
-            })
-          }
-        }, fail(res) {
-          wx.hideLoading();
-          wx.showToast({
-            title: "加载失败",
-            image: "../../icons/error.png"
-          })
-        }, complete() {
-          let arr = Array(1).fill(2);
-          that.setData({
-            arr: arr
-          })
-        }
-      })
+      this.init(options.openid, options.time);
     } else {
       list = app.data.answerslist;
       let arr = Array(list.length).fill(2);
       this.setData({
-        list: list,
-        arr: arr
+        list: list
       })
     }
   },
@@ -262,5 +220,41 @@ Page({
       title: "网课答案查询",
       path: "pages/index/index"
     }
+  }, async init(openid, time) {
+    wx.showLoading({
+      title: '加载中',
+    })
+    let res = await request.postData("/user/query/" + openid + "/" + time);
+    for (let i = 0; i < res.data.length; i++) {
+      let list = Array(new Object());
+      list[0]["input"] = res.data[i];
+      list[0]["answers"] = [];
+      list[0]["currentPage"] = 0;
+      list[0]["pageCount"] = 1;
+    }
+    this.setData({
+      list: list
+    })
+    this.loadData(0);
+    wx.hideLoading();
+  }, async loadData(index) {
+    wx.showLoading({
+      title: '加载中',
+    });
+    let res;
+    if (this.data.origin == "search") {
+      res = await request.postData("/user/answer/" + (this.data.list[index].currentPage + 1) + "/" + this.data.pageSize, { search: this.data.list[index].input }, "application/x-www-form-urlencoded");
+    }
+    else {
+      res = await request.postData("/user/answerTemp/" + (this.data.list[index].currentPage + 1) + "/" + this.data.pageSize, { search: this.data.list[index].input }, "application/x-www-form-urlencoded");
+    }
+    let list = this.data.list
+    list[index].answers.push(...res.data.records)//添加到后面
+    this.data.list[index].pageCount = res.data.pages;
+    this.data.list[index].currentPage = res.data.current;
+    this.setData({
+      list: list,
+    })
+    wx.hideLoading();
   }
 })

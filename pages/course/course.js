@@ -1,5 +1,8 @@
 // pages/course/course.js
 const app = getApp();
+const api = require("../../utils/api.js");
+const request = require("../../utils/request.js");
+
 Page({
 
   /**
@@ -8,46 +11,32 @@ Page({
   data: {
     hidden: true,
     courses: [],
-    pageNo: 0,
+    pageNo: 1,
     pageSize: 20,
     search: "",
-    hideLoading: true,
     pageTotal: 0,
-    rewardedVideoAd:null,
-    interstitialAd:null
-  }, requestData() {
+    isLoading:false,
+    rewardedVideoAd: null,
+    interstitialAd: null
+  }, async requestData() {
     wx.showLoading({
       title: "加载中",
-    })
-    let that = this;
-    wx.request({
-      url: app.data.requestUrl + "course/1/" + that.data.pageSize,
-      method: "POST",
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      data: {
-        search: that.data.search
-      }, success(res) {
-        if (res.data.total != 0) {
-          that.setData({
-            courses: res.data.records,
-            pageNo: res.data.current,
-            hidden: true,
-            pageTotal: res.data.pages,
-            hideLoading: true
-          });
-        } else {
-          that.setData({
-            hidden: false,
-            courses: [],
-            hideLoading: true
-          })
-        }
-      },complete(){
-        wx.hideLoading()
-      }
-    })
+    });
+    let res = await request.postData("/user/course/1/" + this.data.pageSize, { "search": this.data.search }, "application/x-www-form-urlencoded");
+    if (res.data.total) {
+      this.setData({
+        courses: res.data.records,
+        pageNo: res.data.current,
+        hidden: true,
+        pageTotal: res.data.pages,
+      });
+    } else {
+      this.setData({
+        hidden: false,
+        courses: [],
+      })
+    }
+    wx.hideLoading();
   }, searchChanged(res) {
     this.data.search = res.detail.value;
   }, loadMoreData() {
@@ -57,37 +46,29 @@ Page({
         icon: "none"
       })
     } else {
-      if (this.data.hideLoading) {
-        this.setData({
-          hideLoading: false,
-        });
-        let that = this;
-        let pageNo = (that.data.pageNo + 1);
-        wx.request({
-          url: app.data.requestUrl + "course/" + pageNo + "/" + that.data.pageSize,
-          method: "POST",
-          header: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          data: {
-            search: that.data.search
-          }, success(res) {
-            that.data.courses.push(...res.data.records);
-            that.setData({
-              courses: that.data.courses,
-              pageNo: res.data.current,
-            });
-          }, complete() {
-            that.setData({
-              hideLoading: true
-            })
-          }
-        })
+      if (!this.data.isLoading) {
+        this.loadData();
       }
     }
+  },async loadData(){
+    wx.showLoading({
+      title: '加载中...',
+    })
+    this.setData({
+      isLoading:true
+    })
+    let pageNo = (this.data.pageNo + 1);
+    let res = await request.postData("/user/course/" + pageNo + "/" + this.data.pageSize, { "search": this.data.search }, "application/x-www-form-urlencoded");
+    this.data.courses.push(...res.data.records);
+    this.setData({
+      courses: this.data.courses,
+      pageNo: res.data.current,
+      isLoading:false
+    });
+    wx.hideLoading();
   }, getDetail(res) {
-    let that=this;
-    if (app.data.num < 1) {
+    let that = this;
+    if (api.getNum() < 1) {
       wx.showModal({
         title: "积分不足",
         content: "是否通过观看广告来获取积分？",
@@ -97,9 +78,9 @@ Page({
           }
         }
       })
-     } else {
-       app.data.num--;
-       app.changeNum();
+    } else {
+      api.setNum(api.getNum() - 1);
+      api.changeNum();
       wx.navigateTo({
         url: "../detail/detail?id=" + res.currentTarget.dataset.id,
       })
@@ -125,18 +106,18 @@ Page({
     });
     this.data.rewardedVideoAd.onError((e) => {
       if (e.errCode == 1004) {
-        app.data.num++;
-        app.changeNum();
+        api.setNum(api.getNum() + 1);
+        api.changeNum();
       }
     });
     this.data.rewardedVideoAd.onClose((res) => {
       if (res.isEnded) {
-        app.data.num += 30;
         wx.showToast({
           title: "观看成功,积分+30",
           icon: "none"
         })
-        app.changeNum();
+        api.setNum(api.getNum() + 30);
+        api.changeNum();
       }
     });
   },
@@ -151,12 +132,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    // if (app.data.num > 0 && app.data.num % 2 == 0 && app.data.interstitialAd) {
     if (app.data.interstitialAd && this.interstitialAd) {
-        this.interstitialAd.show();
-        app.data.interstitialAd = false;
-      }
-    // }
+      this.interstitialAd.show();
+      app.data.interstitialAd = false;
+    }
   },
 
   /**

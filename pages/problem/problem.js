@@ -1,5 +1,5 @@
 // pages/problem/problem.js
-const app=getApp()
+let request = require("../../utils/request.js")
 Page({
 
   /**
@@ -11,28 +11,24 @@ Page({
   },
   bindFormSubmit: function (res) {
     if (res.detail.value.textarea) {
-      wx.showLoading({
-        title: "正在反馈",
-      })
-      wx.request({
-        url: app.data.requestUrl + "problem",
-        method: "POST",
-        data: {
-          time: require("../../utils/util.js").formatTime(new Date()),
-          problem: res.detail.value.textarea
-        },
-        success: function (e) {
-          wx.hideLoading()
-          wx.showToast({
-            title: "反馈成功",
-            icon: "success"
-          })
-          setTimeout(function () {
-            wx.navigateBack();
-          }, 1600);
-        }
-      })
+      this.problem(res.detail.value.textarea);
     }
+  }, async problem(problem) {
+    wx.showLoading({
+      title: "正在反馈",
+    });
+    let res = await request.postData("/user/problem/upload", {
+      "time": require("../../utils/util.js").formatTime(new Date()),
+      problem
+    });
+    wx.hideLoading()
+    wx.showToast({
+      title: "反馈成功",
+      icon: "success"
+    })
+    setTimeout(() => {
+      wx.navigateBack();
+    }, 1600);
   },
   onShareAppMessage: function () {
     return {
