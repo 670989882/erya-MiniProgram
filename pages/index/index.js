@@ -283,13 +283,10 @@ Page({
     }
   },
   onLoad: function (res) {
-    wx.showLoading({
-      title: "获取通知中",
-    });
     this.setData({
       adShow: wx.getSystemInfoSync().windowHeight > 600 ? true : false
     });
-    this.getNotice();
+    app.watch(this.setNotice);
     // 在页面onLoad回调事件中创建插屏广告实例
     this.interstitialAd = wx.createInterstitialAd({
       adUnitId: "adunit-2bb2a69f9a978b6b"
@@ -384,7 +381,6 @@ Page({
         data: "1",
       })
     }
-
   },
   endedRecord() {
     this.data.recorderManager.stop();
@@ -472,15 +468,9 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
-  }, async getNotice() {
-    while (!request.getToken());
-    wx.showLoading({
-      title: '获取通知中',
-    })
-    let res = await request.postData("/user/notice/getNotice/notice");
+  }, setNotice(notice) {
     this.setData({
-      notice: res
-    });
-    wx.hideLoading();
+      notice
+    })
   }
 })

@@ -8,7 +8,19 @@ let expiretime=0;
 
 const login = () => {
   return new Promise((resolve, reject) => {
-    return request.postData("/auth/auth/login", { username, password }).then((res) => {
+    // const CryptoJS=require("./aes.js");
+    // var aseKey = '1234567890123456789012335475';//秘钥
+    // var key = CryptoJS.enc.Utf8.parse(aesKey);//将秘钥转换成Utf8字节数组
+    // var encrypt = CryptoJS.AES.encrypt(JSON.stringify(data1), key, {
+    //   iv: CryptoJS.enc.Utf8.parse(aseKey.substr(0, 16)),
+    //   mode: CryptoJS.mode.CBC,
+    //   padding: CryptoJS.pad.Pkcs7
+    // });
+    // var data2 = encrypt.toString();//加密后的数据
+    // console.log(data2);
+    let time=new Date().getTime();
+    console.log(time);
+    return request.postData("/auth/auth/login", { username, password ,time}).then((res) => {
       if (res.data) {
         request.setToken(res.data.token);
         expiretime=res.data.expiretime;

@@ -7,6 +7,7 @@ App({
     answerslist: [],
     interstitialAd: false,
     voice: "",
+    notice:""
   },
   // 监听错误
   onError: function (err) {
@@ -24,6 +25,7 @@ App({
     this.data.voice = wx.getStorageSync("voice");
   }, async init() {
     await api.login();
+    this.getNotice();
     wx.login({
       success(res) {
         if (res.code) {
@@ -37,5 +39,25 @@ App({
   }, onShow() {
     if (new Date().getTime() - api.getExpiretime() < 3600000)
       api.login();
+  },//app 全局属性监听
+  watch(method) {
+    var obj = this.data;
+    Object.defineProperty(obj, "notice", {  //这里的 data 对应 上面 globalData 中的 data
+      configurable: true,
+      enumerable: true,
+      set: function (value) {  //动态赋值，传递对象，为 globalData 中对应变量赋值
+        method(value);
+      },
+      get: function () {  //获取全局变量值，直接返回全部
+        return this.data;
+      }
+    })
+  }, async getNotice() {
+    wx.showLoading({
+      title: '获取通知中',
+    })
+    let res = await request.postData("/user/notice/getNotice/notice");
+    this.data.notice=res;
+    wx.hideLoading();
   }
 })

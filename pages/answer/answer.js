@@ -1,6 +1,7 @@
 // pages/answer/answer.js
 const app = getApp();
 const request = require("../../utils/request.js");
+const api = require("../../utils/api.js");
 
 Page({
 
@@ -11,7 +12,6 @@ Page({
     list: [],
     pageSize: 10,
     origin: "search"
-    // arr: [],
   },
   onShareAppMessage: function () {
     return {
@@ -114,6 +114,7 @@ Page({
       this.setData({
         origin: "notify"
       });
+      // while(!request.getToken());
       this.init(options.openid, options.time);
     } else {
       list = app.data.answerslist;
@@ -224,6 +225,7 @@ Page({
     wx.showLoading({
       title: '加载中',
     })
+    await api.login();
     let res = await request.postData("/user/query/" + openid + "/" + time);
     for (let i = 0; i < res.data.length; i++) {
       let list = Array(new Object());
