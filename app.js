@@ -1,4 +1,4 @@
-const api = require('./utils/api.js');
+const api = require("./utils/api.js");
 const request = require("./utils/request.js")
 
 App({
