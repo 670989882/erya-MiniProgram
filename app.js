@@ -37,8 +37,9 @@ App({
       }
     })
   }, onShow() {
-    if (new Date().getTime() - api.getExpiretime() < 3600000)
+    if (api.getExpiretime()&&api.getExpiretime() - new Date().getTime()< 3600000){
       api.login();
+    }
   },//app 全局属性监听
   watch(method) {
     var obj = this.data;

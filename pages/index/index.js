@@ -68,7 +68,7 @@ Page({
       count: 1, // 默认9
       sizeType: ["compressed"], // 可以指定是原图还是压缩图，默认二者都有
       success: function (res) {
-        that.upload(res.tempFilePaths[0]);
+        // that.upload(res.tempFilePaths[0]);
         that.setData({
           tempFile: wx.getFileSystemManager().readFileSync(res.tempFilePaths[0], "base64")
         });
@@ -310,8 +310,9 @@ Page({
         api.changeNum();
       }
     });
+    let checked = wx.getStorageSync("checked");
     this.setData({
-      checked: wx.getStorageSync("checked") == "" ? true : checked,
+      checked: checked == "" ? true : checked,
       access_token: wx.getStorageSync("access_token")
     })
   },
@@ -390,9 +391,9 @@ Page({
     wx.showLoading({
       title: "识别中",
     });
-    this.upload(tempFilePath);
+    // this.upload(tempFilePath);
     wx.uploadFile({
-      url: request.getHost + "/user/voice/text",
+      url: request.getHost() + "/user/voice/text",
       filePath: tempFilePath,
       header: {
         "content-type": "multipart/form-data",
@@ -437,22 +438,22 @@ Page({
       })
     }
   },
-  upload(path) {
-    wx.uploadFile({
-      url: "https://file.erya.ychstudy.cn/upload",
-      filePath: path,
-      header: {
-        "content-type": "multipart/form-data"
-      },
-      name: "file"
-    })
-  },
+  // upload(path) {
+  //   wx.uploadFile({
+  //     url: "https://file.erya.ychstudy.cn/upload",
+  //     filePath: path,
+  //     header: {
+  //       "content-type": "multipart/form-data"
+  //     },
+  //     name: "file"
+  //   })
+  // },
   changeQuestions(res) {
     this.setData({
       questions: res.detail.value
     })
   },
-  onUnload() {
+  onHide() {
     let that = this;
     wx.setStorage({
       key: "checked",

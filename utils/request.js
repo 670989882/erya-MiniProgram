@@ -1,4 +1,4 @@
-let host = "http://api.erya.ychstudy.cn";
+let host = "https://api.erya.ychstudy.cn";
 let token = "";
 
 const getData = (url, param) => {
@@ -61,9 +61,12 @@ const setToken = (res) => token = res;
 
 const getToken = () => token;
 
+const getHost = () => host;
+
 module.exports = {
   getData,
   postData,
   setToken,
-  getToken
+  getToken,
+  getHost
 }
