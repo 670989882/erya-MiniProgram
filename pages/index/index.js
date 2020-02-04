@@ -287,6 +287,9 @@ Page({
       adShow: wx.getSystemInfoSync().windowHeight > 600 ? true : false
     });
     app.watch(this.setNotice);
+    this.setData({
+      notice:app.data.notice
+    })
     // 在页面onLoad回调事件中创建插屏广告实例
     this.interstitialAd = wx.createInterstitialAd({
       adUnitId: "adunit-2bb2a69f9a978b6b"

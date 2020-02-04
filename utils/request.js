@@ -16,7 +16,7 @@ const getData = (url, param) => {
         } else {
           wx.showToast({
             title: res.data.code + ":" + res.data.data,
-            image: "../../icons/error.png"
+            image: "../icons/error.png"
           });
           reject(res.data)
         }
