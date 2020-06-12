@@ -1,4 +1,4 @@
-let host = "https://api.erya.ychstudy.cn";
+let host = "https://api.erya.neck.fun";
 let token = "";
 
 const getData = (url, param) => {
