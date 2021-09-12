@@ -58,6 +58,7 @@ App({
       title: '获取通知中',
     })
     let res = await request.postData("/user/notice/getNotice/notice");
+    fgfgfggf
     this.data.notice=res;
     wx.hideLoading();
 
