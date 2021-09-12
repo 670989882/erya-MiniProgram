@@ -60,7 +60,5 @@ App({
     let res = await request.postData("/user/notice/getNotice/notice");
     this.data.notice=res;
     wx.hideLoading();
-    wx.hideLoading();
-
   }
 })
